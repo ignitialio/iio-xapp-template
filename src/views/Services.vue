@@ -2,7 +2,8 @@
   <div class="services-layout">
     <ig-list class="services-left tw-m-1 tw-shadow t-h-full" :items="$services.servicesDico"
       itemRenderer="ig-listitem"
-      @select="handleSelect" pictureProperty="options.description.icon"
+      @select="handleSelect"
+      pictureProperty="options.description.icon"
       titleProperty="name"
       subtitleProperty="options.description.title">
     </ig-list>
@@ -46,8 +47,6 @@ export default {
     }
     this.$services.on('service:up', this._listeners.onServiceUp)
     this.$services.on('service:down', this._listeners.onServiceDown)
-
-    console.log($j(this.$services.servicesDico))
   },
   beforeDestroy() {
     this.$services.off('service:up', this._listeners.onServiceUp)

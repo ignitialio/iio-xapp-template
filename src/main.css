@@ -14,8 +14,7 @@
   transform: rotate(90deg);
 }
 
-.ig-ellipsis {
-  width: 100%;
+.ig-ellipsis {
   text-overflow: ellipsis;
   overflow-x: hidden;
   white-space: nowrap;
