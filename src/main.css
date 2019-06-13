@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.ig-rotated-90 {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.ig-ellipsis {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+.ig-blink {
+  animation: blinker 1.5s linear infinite;
+}
+
+.ig-blink-fast {
+  animation: blinker 0.5s linear infinite;
+}
+
+.ig-blink-fast-highlighted {
+  border: 1px solid tomato!important;
+  animation: blinker 0.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0; }
+}
+
+@media screen and (min-width: 800px) {
+  .ig-mobileonly {
+    display: none;
+  }
+}
