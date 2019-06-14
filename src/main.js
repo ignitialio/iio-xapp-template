@@ -27,6 +27,8 @@ import IGToolbar from './components/IGToolbar.vue'
 import IGList from './components/IGList.vue'
 import IGMenuItem from './components/IGMenuItem.vue'
 import IGListItem from './components/IGListItem.vue'
+import IGInput from './components/IGInput.vue'
+import IGPaper from './components/IGPaper.vue'
 
 // -----------------------------------------------------------------------------
 // Specific imports
@@ -66,6 +68,8 @@ Vue.component('ig-toolbar', IGToolbar)
 Vue.component('ig-list', IGList)
 Vue.component('ig-menuitem', IGMenuItem)
 Vue.component('ig-listitem', IGListItem)
+Vue.component('ig-input', IGInput)
+Vue.component('ig-paper', IGPaper)
 
 
 // waiting for asyncrounous plugins to be ready (here i18n)

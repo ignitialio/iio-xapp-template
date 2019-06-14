@@ -1,6 +1,7 @@
 <template>
   <div class="services-layout">
-    <ig-list class="services-left tw-m-1 tw-shadow t-h-full" :items="$services.servicesDico"
+    <ig-list class="services-left tw-m-1 tw-shadow t-h-full"
+      :items="services"
       itemRenderer="ig-listitem"
       @select="handleSelect"
       pictureProperty="options.description.icon"
@@ -16,29 +17,30 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   data: () => {
     return {
-      selected: null
+      selected: null,
+      services: null
     }
   },
-  components: {},
   methods: {
     onServiceUp(service) {
       // console.log(this.$i18n._translations)
-      this.$forceUpdate()
+      this.services = _.sortBy(_.values(this.$services.servicesDico), [ 'name' ])
     },
     onServiceDown(service) {
+      this.services = _.sortBy(_.values(this.$services.servicesDico), [ 'name' ])
       if (this.selected && service === this.selected.name) {
         this.selected = null
       }
-      this.$forceUpdate()
     },
     handleSelect(service) {
       this.selected = service
     }
   },
-  computed: {},
   mounted() {
     // listeners
     this._listeners = {
@@ -47,6 +49,8 @@ export default {
     }
     this.$services.on('service:up', this._listeners.onServiceUp)
     this.$services.on('service:down', this._listeners.onServiceDown)
+
+    this.services = _.sortBy(_.values(this.$services.servicesDico), [ 'name' ])
   },
   beforeDestroy() {
     this.$services.off('service:up', this._listeners.onServiceUp)

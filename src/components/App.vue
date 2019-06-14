@@ -35,7 +35,7 @@ export default {
 }
 
 .blurrable {
-  transition: filter 1s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+  transition: filter 1s cubic-bezier(0.3, 0.7, 1.0, 0.8); /* cubic-bezier(0.1, 0.7, 1.0, 0.1); */
   filter: blur(0);
 }
 
