@@ -51,6 +51,22 @@ export default {
     this.$services.on('service:down', this._listeners.onServiceDown)
 
     this.services = _.sortBy(_.values(this.$services.servicesDico), [ 'name' ])
+
+    this.$services.waitForService('iiost').then(iiost => {
+      iiost.oneGetServiceMethod({ toto: 'titi' }).then(result => {
+        console.log(result)
+      }).catch(err => console.log(err))
+
+      iiost.onePostServiceMethod({ toto: 'titi' }).then(result => {
+        console.log(result)
+      }).catch(err => console.log(err))
+    }).catch(err => console.log(err))
+
+    this.$modules.waitForModule('dlake', 'users').then(users => {
+      users.d_find({ }).then(result => {
+        console.log(result)
+      }).catch(err => console.log(err))
+    }).catch(err => console.log(err))
   },
   beforeDestroy() {
     this.$services.off('service:up', this._listeners.onServiceUp)

@@ -12,4 +12,6 @@ else
   exit 1
 fi
 
+export IIOS_NAMESPACE=ignitialio
+export MONGODB_DBNAME=ignitialio
 ./tools/populate_db-mongo.js

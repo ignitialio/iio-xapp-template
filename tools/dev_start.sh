@@ -22,6 +22,7 @@ export APP_VERSION=$(cat package.json \
 echo "app version: ${APP_VERSION}"
 
 export IIOS_NAMESPACE=ignitialio
+export MONGODB_DBNAME=ignitialio
 
 docker-compose up -d
 
@@ -33,4 +34,4 @@ export S3_SECRET_ACESS_KEY=xMzrrXMtnFEOP/K7MDFRA/bPxRfiCYEXOTOTOYEK
 
 export EMAILER_SMTP_PASS=toto
 
-npm run start:dev
+npm-run-all --parallel server:start client:serve

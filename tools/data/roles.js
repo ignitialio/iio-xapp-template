@@ -1,73 +1,63 @@
 module.exports = {
   admin: {
-    roles: {
+    'dlake': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
     },
-    users: {
+    'dlake:users': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
     },
-    notifications: {
+    'bob': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
     },
-    connections: {
-      'create:any': [ '*' ],
-      'read:any': [ '*' ],
-      'delete:any': [ '*' ]
-    },
-    metas: {
+    'ted': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
-    },
-    myunified: {
-      'update:any': [ 'myServiceMethod' ]
     }
   },
   user: {
-    roles: {
+    'dlake': {
       'read:any': [ '*' ]
     },
-    users: {
+    'dlake:users': {
       'read:any': [ '*' ],
-      'update:own': [ '*', 'roles'],
-      'delete:own': [ '*', 'roles']
-    },
-    notifications: {
-      'create:own': [ '*' ],
-      'read:own': [ '*' ],
       'update:own': [ '*' ],
       'delete:own': [ '*' ]
     },
-    connections: {
+    'bob': {
+      'read:any': [ '*' ],
+      'update:any': [ '*' ],
+      'delete:any': [ '*' ]
+    },
+    'ted': {
       'create:any': [ '*' ],
-      'read:any': [ '*' ]
-    },
-    metas: {
-      'read:any': [ '*' ]
-    },
-    myunified: {
-      'update:any': [ 'myServiceMethod' ]
+      'read:any': [ '*' ],
+      'update:any': [ '*' ],
+      'delete:any': [ '*' ]
     }
   },
   anonymous: {
-    roles: {
+    'dlake': {
       'read:any': [ '*' ]
     },
-    users: {
-      'read:any': [ '_id', 'role', 'firstname', 'lastname', 'avatar', 'password', '_lastModified', 'username' ]
+    'dlake:users': {
+      'read:any': [ '_id', 'name' ]
     },
-    metas: {
+    'bob': {
       'read:any': [ '*' ]
+    },
+    'ted': {
+      'read:own': [ '*' ]
     }
   }
 }
