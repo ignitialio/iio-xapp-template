@@ -24,7 +24,7 @@ echo "app version: ${APP_VERSION}"
 export IIOS_NAMESPACE=ignitialio
 export MONGODB_DBNAME=ignitialio
 
-docker-compose up -d
+docker-compose -f docker-compose-dev.yml up -d
 
 export S3_SECURE=false
 export S3_ENDPOINT=localhost

@@ -13,20 +13,6 @@ if (!EMAILER_SMTP_PASS) {
 }
 
 module.exports = {
-  apigateway: {
-    namespace: process.env.IIOS_NAMESPACE || 'ignitialio',
-    /* calling timeout for pub/sub mode */
-    timeout: 5000,
-    connector: {
-      redis: {
-        encoder: 'bson',
-        sentinels: redisCfg.REDIS_SENTINELS,
-        host: redisCfg.REDIS_HOST,
-        port: redisCfg.REDIS_PORT,
-        db: redisCfg.REDIS_DB
-      }
-    }
-  },
   emailer: {
     smtp: {
       host: process.env.EMAILER_SMTP_HOST || 'mail.ignitial.fr', /* SMTP host */
@@ -41,19 +27,6 @@ module.exports = {
     },
     mail: {
       from: 'Systra Support <no-reply@ignitial.fr>'
-    }
-  },
-  data: {
-    service: 'dlake',
-    namespace: process.env.IIOS_NAMESPACE || 'ignitialio',
-    heartbeatPeriod: 5000,
-    populateIfEmpty: true,
-    engine: 'mongo',
-    redis: {
-      sentinels: redisCfg.REDIS_SENTINELS,
-      host: redisCfg.REDIS_HOST,
-      port: redisCfg.REDIS_PORT,
-      db: redisCfg.REDIS_DB
     }
   }
 }

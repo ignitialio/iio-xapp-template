@@ -1,16 +1,17 @@
 <template>
-  <div class="services-layout">
-    <ig-list class="services-left tw-m-1 tw-shadow t-h-full"
-      :items="services"
-      itemRenderer="ig-listitem"
-      @select="handleSelect"
-      pictureProperty="options.description.icon"
-      titleProperty="name"
-      subtitleProperty="options.description.title">
+  <div class="services-layout tw-flex tw-w-full">
+    <ig-list class="tw-w-1/4 tw-m-1 tw-shadow t-h-full">
+      <ig-listitem v-for="(service, index) in services" :key="index"
+        :item="service" @select="selected = $event"
+        titleProperty="name" subtitleProperty="options.description.title"
+        @mounted="handleMounted(service)"
+        :picture="service._iconUrl">
+      </ig-listitem>
     </ig-list>
 
-    <div class="services-right">
-      <component :is="selected.name" class="service-component"
+    <div class="tw-w-3/4 tw-p-1">
+      <component :is="selected.name"
+        class="services-component tw-shadow"
         v-if="selected && selected.options.uiComponentInjection"></component>
     </div>
   </div>
@@ -28,14 +29,39 @@ export default {
   },
   methods: {
     onServiceUp(service) {
-      // console.log(this.$i18n._translations)
       this.services = _.sortBy(_.values(this.$services.servicesDico), [ 'name' ])
+      this.getImage(service, service.name, service.options.description.icon)
+        .then(() => this.$forceUpdate())
+        .catch(err => console.log(err))
     },
     onServiceDown(service) {
       this.services = _.sortBy(_.values(this.$services.servicesDico), [ 'name' ])
       if (this.selected && service === this.selected.name) {
         this.selected = null
       }
+    },
+    handleMounted(item) {
+      if (item.options && item.options.description) {
+        this.getImage(item, item.name, item.options.description.icon)
+          .catch(err => console.log(err))
+      }
+    },
+    getImage(itemToUpdate, serviceName, fileName) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          let imageData = await this.$services.getFileFromService(serviceName, fileName)
+          let typedArray = new Uint8Array(imageData)
+          let type = fileName.toLowerCase().match(/\.[0-9a-z]+$/i)[0].replace('.', '')
+          if (type) {
+            itemToUpdate._iconUrl = 'data:image/' + type + ';base64, ' +
+              btoa(String.fromCharCode.apply(null, typedArray))
+
+            resolve()
+          }
+        } catch (err) {
+          reject(err)
+        }
+      })
     },
     handleSelect(service) {
       this.selected = service
@@ -62,9 +88,9 @@ export default {
       }).catch(err => console.log(err))
     }).catch(err => console.log(err))
 
-    this.$modules.waitForModule('dlake', 'users').then(users => {
-      users.d_find({ }).then(result => {
-        console.log(result)
+    this.$services.waitForService(this.$config.data.service + ':users').then(users => {
+      users.dFind({ }).then(result => {
+        console.log('users', result.length)
       }).catch(err => console.log(err))
     }).catch(err => console.log(err))
   },
@@ -77,23 +103,11 @@ export default {
 
 <style scoped>
 .services-layout {
-  width: 100%;
-  display: flex;
-}
 
-.services-left {
-  width: 25%;
-}
-
-.services-right {
-  width: 75%;
-  height: 100%;
 }
 
 .service-component {
-  margin: 8px;
-  width: calc(100% - 16px);
-  height: calc(100% - 16px);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
 }
 </style>

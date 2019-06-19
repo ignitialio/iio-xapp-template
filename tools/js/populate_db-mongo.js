@@ -22,8 +22,9 @@ async function run() {
         (process.env.MONGODB_OPTIONS ? '?' + process.env.MONGODB_OPTIONS : '')
     }
 
-    console.log('connecting to ' + url + '...')
     let client = await MongoClient.connect(url, { useNewUrlParser: true })
+
+    console.log('connected to ' + url)
 
     let db = client.db()
     let userRoles = await users(db)

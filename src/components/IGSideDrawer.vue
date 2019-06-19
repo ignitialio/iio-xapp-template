@@ -13,8 +13,10 @@
 
       </div>
 
-      <ig-list :items="menuItems" itemRenderer="ig-menuitem"
-        @select="handleSelected"></ig-list>
+      <ig-list :items="menuItems" @select="handleSelected">
+        <ig-menuitem v-if="item" v-for="(item, index) in menuItems" :key="index"
+          :item="item" @select="handleSelected"></ig-menuitem>
+      </ig-list>
     </div>
   </div>
 </template>
@@ -45,12 +47,32 @@ export default {
       this.$emit('input', false)
       this.$router.push(e.path)
       console.log(JSON.stringify(e, null, 2))
+    },
+    handleMenuItemsAdd(items) {
+      let routes = []
+      for (let item of items) {
+        this.menuItems.push(item)
+        if (item.route) {
+          routes.push(item.route)
+        }
+      }
+
+      if (routes.length > 0) {
+        this.$router.addRoutes(routes)
+      }
     }
   },
   mounted() {
+    this._listeners = {
+      onMenuItemsAdd: this.handleMenuItemsAdd.bind(this)
+    }
+
     this.menuItems = this.$config.appMenu.items
+
+    this.$services.on('app:menu:add', this._listeners.onMenuItemsAdd)
   },
-  computed: {
+  beforeDestroy() {
+    this.$services.off('app:menu:add', this._listeners.onMenuItemsAdd)
   }
 }
 </script>

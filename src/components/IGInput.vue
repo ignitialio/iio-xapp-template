@@ -7,7 +7,7 @@
         tw-border-b tw-border-yellow-300
         tw-text-gray-700 hover:tw-text-yellow-700
         focus:tw-border focus:tw-border-yellow-600"
-        :value="i_value" @change="handleChange"
+        :value="value" @input="handleInput"
         :type="type"/>
   </div>
 </template>
@@ -29,21 +29,15 @@ export default {
   },
   data: () => {
     return {
-      i_value: null
-    }
-  },
-  watch: {
-    value: function(val) {
-      this.i_value = val
     }
   },
   methods: {
-    handleChange(val) {
-      this.$emit('input', this.i_value)
+    handleInput(event) {
+      this.$emit('input', event.target.value)
     }
   },
   mounted() {
-    this._i_value = _.cloneDeep(this.value)
+
   },
   computed: {
   }

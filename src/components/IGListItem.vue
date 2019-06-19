@@ -4,12 +4,15 @@
       tw-border-b tw-border-yellow-300
       tw-text-gray-700 hover:tw-text-yellow-700 hover:tw-bg-gray-100
       tw-cursor-pointer tw-select-none"
-    :class="{ 'tw-bg-yellow-700 tw-text-white' : i_selected }"
+    :class="{ 'tw-bg-yellow-700 tw-text-white' : iSelected }"
     @click="handleClick">
 
-    <div v-if="$utils.getByPath(item, pictureProperty)"
+    <div v-if="$utils.getByPath(item, pictureProperty) || picture"
       class="tw-flex tw-justify-center tw-items-center tw-w-12 tw-h-12">
-      <img class="tw-w-8 tw-h-8" :src="$utils.getByPath(item, pictureProperty)"/>
+      <img v-if="$utils.getByPath(item, pictureProperty)"
+        class="tw-w-8 tw-h-8" :src="$utils.getByPath(item, pictureProperty)"/>
+      <img v-if="picture"
+        class="tw-w-8 tw-h-8" :src="picture"/>
     </div>
 
     <div class="listitem-text tw-mx-4 tw-w-full tw-flex tw-flex-col tw-justify-center tw-overflow-hidden">
@@ -28,6 +31,7 @@ export default {
     selected: {
       type: Boolean
     },
+    picture: {},
     pictureProperty: {
       type: String,
       default: 'picture'
@@ -44,21 +48,22 @@ export default {
   },
   data: () => {
     return {
-      i_selected: false
+      iSelected: false
     }
   },
   watch: {
     selected: function(val) {
-      this.i_selected = val
+      this.iSelected = val
     }
   },
   methods: {
     handleClick() {
       this.$emit('select', this.item)
-      this.$emit('update:selected', !this.i_selected)
+      this.$emit('update:selected', !this.iSelected)
     }
   },
   mounted() {
+    this.$emit('mounted')
   },
   computed: {
   }

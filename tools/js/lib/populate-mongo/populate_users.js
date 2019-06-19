@@ -72,7 +72,7 @@ exports.populate = async db => {
       method: 'get',
       responseType: 'json'
     })
-    
+
     let usersData = response.data.results
 
     console.log('users data length before rework', usersData.length)
@@ -98,7 +98,7 @@ exports.populate = async db => {
 
     console.log('users collection length ', docs.length)
     console.log('users done')
-    fs.writeFileSync(path.join(__dirname, '../../data/randomRoles.json'),
+    fs.writeFileSync(path.join(__dirname, '../../../data/randomRoles.json'),
       JSON.stringify(userRoles, null, 2), 'utf8')
     return userRoles
   } catch (err) {
