@@ -1,5 +1,5 @@
 <template>
-  <div v-if="item.anonymousAccess || (item.hideIfLogged && !$store.user)"
+  <div v-if="(item.anonymousAccess && !logged) || (logged && !item.hideIfLogged)"
     class="menuitem-layout tw-w-full tw-h-10
       tw-flex tw-items-center tw-px-4
       tw-border-b tw-border-yellow-300
@@ -36,11 +36,18 @@ export default {
     handleClick() {
       this.$emit('select', this.item)
       this.$emit('update:selected', !this.iSelected)
+      
+      if (this.item.event) {
+        this.$services.emit('signout')
+      }
     }
   },
   mounted() {
   },
   computed: {
+    logged() {
+      return !!this.$store.state.user
+    }
   }
 }
 </script>

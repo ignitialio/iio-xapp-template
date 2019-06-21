@@ -18,8 +18,6 @@ export default {
         resetLocalCredentials() {
           localStorage.token = null
           this.$store.commit('user', null)
-          this.socket._logged = false
-          this.heartbeat = false
         }
       }
 

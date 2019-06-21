@@ -14,7 +14,7 @@ export function getRouter(Vue) {
     mode: 'hash',
     routes: [{
         path: '/',
-        name: 'rootPath',
+        name: 'root',
         component: Main/*,
         beforeEnter: (to, from, next) => {
           let token = localStorage.getItem('token')
@@ -25,21 +25,17 @@ export function getRouter(Vue) {
           }
         }*/
       }, {
-          path: '/services',
-          component: Services/*,
-          beforeEnter: (to, from, next) => {
-            let token = localStorage.getItem('token')
-            if (token && token !== 'null') {
-              next()
-            } else {
-              next({ path: '/login' })
-            }
-          }*/
+        path: '/services',
+        component: Services/*,
+        beforeEnter: (to, from, next) => {
+          let token = localStorage.getItem('token')
+          if (token && token !== 'null') {
+            next()
+          } else {
+            next({ path: '/login' })
+          }
+        }*/
       }, {
-        path: '/login',
-        component: Login
-      },
-      {
         path: '*',
         redirect: '/'
       }

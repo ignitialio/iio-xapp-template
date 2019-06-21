@@ -22,11 +22,11 @@ export default {
     this.ready = true
 
     // wait for login
-    this.$services.waitForProperty(this.$ws.socket, '_logged').then(async () => {
+    this.$services.waitForProperty(this.$store.state, 'user').then(async () => {
       let myunified = await this.$services.waitForService('myunified')
       let result = await myunified.myServiceMethod()
       console.log('service method result= ', result)
-      let myaddon = await this.$modules.waitForService('myaddon')
+      let myaddon = await this.$modules.waitForModule('myaddon')
       result = await myaddon.myAddOnMethod()
       console.log('module method result= ', result)
 

@@ -14,4 +14,4 @@ fi
 
 export IIOS_NAMESPACE=ignitialio
 export MONGODB_DBNAME=ignitialio
-./tools/js/populate_db-mongo.js
+./tools/js/populate_db-mongo.js > tools/logs/populate.log

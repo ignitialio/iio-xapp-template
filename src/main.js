@@ -82,32 +82,18 @@ Vue.prototype.$utils
     ...App
   })
 
-  // on service up (unified services)
-  app.$services.on('service:up', service => {
-    if (!service) {
-      console.log('something weird there when service up')
-      return
-    }
-
-    switch (service.name) {
-      case 'auth':
-        if (app.$store.state.user) {
-          app.$services.auth.authenticate({
-            username: app.$store.state.user.username,
-            token: localStorage.token
-          }).then(() => {
-            console.log('authenticated')
-            app.$ws.socket._logged = true
-            app.$services.$emit('app:login')
-          }).catch(err => {
-            console.log('authentication failed', err)
-            // app.$ws.resetLocalCredentials()
-            // app.$router.push('/login')
-            app.$services.$emit('app:logout')
-          })
-        }
-        break
-      default:
+  app.$services.waitForService('auth').then(async authService => {
+    try {
+      if (localStorage.token) {
+        await authService.authenticate(localStorage.token)
+        console.log('authenticated')
+      } else {
+        app.$ws.resetLocalCredentials()
+        app.$router.push('/signin')
+      }
+    } catch (err) {
+      this.$ws.resetLocalCredentials()
+      console.log(err)
     }
   })
 

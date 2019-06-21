@@ -26,6 +26,11 @@ module.exports = {
     service: 'dlake',
     _unified: true
   },
+  /* auth service information */
+  auth: {
+    /* name of the main service that provides authentication control */
+    service: 'auth'
+  },
   i18n: require('./i18n'),
   unified: require('./unified'),
   appMenu: require('./appmenu'),

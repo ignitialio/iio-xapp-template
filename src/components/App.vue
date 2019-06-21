@@ -3,7 +3,8 @@
     <router-view class="app-router blurrable tw-absolute tw-left-0 tw-w-screen tw-h-screen"
       :class="{ 'hidden': showMenu }"></router-view>
 
-    <ig-toolbar class="tw-absolute tw-top-0 tw-left-0"
+    <ig-toolbar v-if="$store.state.user"
+      class="tw-absolute tw-top-0 tw-left-0"
       :showMenu.sync="showMenu"></ig-toolbar>
 
     <ig-sidedrawer v-model="showMenu"></ig-sidedrawer>
@@ -22,6 +23,16 @@ export default {
   methods: {
   },
   mounted() {
+    this.$services.on('signin', info => {
+      this.$store.commit('user', info.user)
+      localStorage.token = info.token
+      this.$router.push('/')
+    })
+
+    this.$services.on('signout', () => {
+      this.$ws.resetLocalCredentials()
+      this.$router.push('/signin')
+    })
   },
   computed: {
   }
