@@ -19,16 +19,7 @@ import modulesPlugin from './plugins/modules.plugin'
 import i18nPlugin from './plugins/i18n.plugin'
 import configPlugin from './plugins/config.plugin'
 import utilsPlugin from './plugins/utils.plugin'
-
-// Base components
-import IGIconButton from './components/IGIconButton.vue'
-import IGSideDrawer from './components/IGSideDrawer.vue'
-import IGToolbar from './components/IGToolbar.vue'
-import IGList from './components/IGList.vue'
-import IGMenuItem from './components/IGMenuItem.vue'
-import IGListItem from './components/IGListItem.vue'
-import IGInput from './components/IGInput.vue'
-import IGPaper from './components/IGPaper.vue'
+import uiPlugin from './plugins/ui.plugin'
 
 // -----------------------------------------------------------------------------
 // Specific imports
@@ -60,16 +51,9 @@ Vue.use(servicesPlugin)
 Vue.use(modulesPlugin)
 Vue.use(i18nPlugin)
 Vue.use(configPlugin)
+Vue.use(uiPlugin)
 
 // initialize components
-Vue.component('ig-iconbutton', IGIconButton)
-Vue.component('ig-sidedrawer', IGSideDrawer)
-Vue.component('ig-toolbar', IGToolbar)
-Vue.component('ig-list', IGList)
-Vue.component('ig-menuitem', IGMenuItem)
-Vue.component('ig-listitem', IGListItem)
-Vue.component('ig-input', IGInput)
-Vue.component('ig-paper', IGPaper)
 
 
 // waiting for asyncrounous plugins to be ready (here i18n)
@@ -92,7 +76,8 @@ Vue.prototype.$utils
         app.$router.push('/signin')
       }
     } catch (err) {
-      this.$ws.resetLocalCredentials()
+      app.$ws.resetLocalCredentials()
+      app.$router.push('/signin')
       console.log(err)
     }
   })

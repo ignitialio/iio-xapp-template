@@ -7,6 +7,10 @@
       class="tw-absolute tw-top-0 tw-left-0"
       :showMenu.sync="showMenu"></ig-toolbar>
 
+    <ig-toolbar v-if="$store.state.user"
+      class="tw-absolute tw-top-0 tw-left-0"
+      :showMenu.sync="showMenu"></ig-toolbar>
+
     <ig-sidedrawer v-model="showMenu"></ig-sidedrawer>
   </div>
 </template>

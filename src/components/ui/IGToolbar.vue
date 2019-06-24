@@ -1,7 +1,11 @@
 <template>
-  <div class="toolbar-layout tw-w-screen">
-    <ig-iconbutton class="tw-absolute tw-top-0 tw-left-0"
-      type="menu" @click="handleMenuToggle"></ig-iconbutton>
+  <div class="toolbar-layout tw-w-screen tw-flex">
+    <ig-iconbutton src="assets/ignitialio-32.png"
+      @click="handleMenuToggle" size="medium"></ig-iconbutton>
+
+    <div class="tw--flex-1 tw-flex tw-justify-center"></div>
+
+    <div class="tw-w-4 tw-h-4"></div>
   </div>
 </template>
 
@@ -35,6 +39,8 @@ export default {
 .toolbar-layout {
   height: 48px;
 }
+
+.
 
 @media screen and (max-width: 800px) {
 
