@@ -1,11 +1,15 @@
 <template>
   <div class="toolbar-layout tw-w-screen tw-flex">
-    <ig-iconbutton src="assets/ignitialio-32.png"
+    <ig-iconbutton v-if="!onlyTitleBar"
+      src="assets/ignitialio-32.png"
       @click="handleMenuToggle" size="medium"></ig-iconbutton>
 
-    <div class="tw--flex-1 tw-flex tw-justify-center"></div>
+    <div class="tw-flex-1 tw-flex tw-justify-center">
+      <slot></slot>
+    </div>
 
-    <div class="tw-w-4 tw-h-4"></div>
+    <ig-icon v-if="!onlyTitleBar"
+      rounded :src="$store.state.user.picture.thumbnail"></ig-icon>
   </div>
 </template>
 
@@ -16,7 +20,8 @@ export default {
     showMenu: {
       type: Boolean,
       default: false
-    }
+    },
+    onlyTitleBar: Boolean
   },
   data: () => {
     return {
@@ -37,6 +42,7 @@ export default {
 
 <style scoped>
 .toolbar-layout {
+  background-color: rgba(255, 255, 255, 0.5);
   height: 48px;
 }
 

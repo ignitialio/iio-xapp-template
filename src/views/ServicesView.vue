@@ -3,7 +3,8 @@
     <ig-list class="tw-w-1/4 tw-m-1 tw-shadow t-h-full">
       <ig-listitem v-for="(service, index) in services" :key="index"
         :item="service" @select="selected = $event"
-        titleProperty="name" subtitleProperty="options.description.title"
+        :title="service.name"
+        :subtitle="service.options && service.options.description ? service.options.description.title : null"
         @mounted="handleMounted(service)"
         :picture="service._iconUrl">
       </ig-listitem>
@@ -55,7 +56,7 @@ export default {
           if (type) {
             itemToUpdate._iconUrl = 'data:image/' + type + ';base64, ' +
               btoa(String.fromCharCode.apply(null, typedArray))
-
+            this.$forceUpdate()
             resolve()
           }
         } catch (err) {
@@ -103,7 +104,7 @@ export default {
 
 <style scoped>
 .services-layout {
-
+  height: calc(100% - 0px);
 }
 
 .service-component {

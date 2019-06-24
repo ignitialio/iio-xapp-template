@@ -1,7 +1,8 @@
 import Router from 'vue-router'
 
-import Services from '../views/Services.vue'
-import Main from '../views/Main.vue'
+import ServicesView from '../views/ServicesView.vue'
+import LoginView from '../views/LoginView.vue'
+import MainView from '../views/MainView.vue'
 
 var routerInstance
 
@@ -11,10 +12,11 @@ export function getRouter(Vue) {
 
   routerInstance =  new Router({
     mode: 'hash',
-    routes: [{
+    routes: [
+      {
         path: '/',
         name: 'root',
-        component: Main/*,
+        component: MainView,
         beforeEnter: (to, from, next) => {
           let token = localStorage.getItem('token')
           if (token && token !== 'null') {
@@ -22,21 +24,12 @@ export function getRouter(Vue) {
           } else {
             next({ path: '/login' })
           }
-        }*/
-      }, {
-        path: '/services',
-        component: Services/*,
-        beforeEnter: (to, from, next) => {
-          let token = localStorage.getItem('token')
-          if (token && token !== 'null') {
-            next()
-          } else {
-            next({ path: '/login' })
-          }
-        }*/
-      }, {
-        path: '*',
-        redirect: '/'
+        }
+      },
+      {
+        path: '/login',
+        name: 'login',
+        component: LoginView
       }
     ]
   })

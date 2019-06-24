@@ -5,7 +5,7 @@ services:
     image: registry.ignitial.io/ignitial/dlake:3.0.0
     container_name: dlake-iioat
     ports:
-      - "20989-20992:20989-20992"
+      - "20989-20999:20989-20999"
     volumes:
       - "/home/vandrito/Documents/Projects/iio/services/dlake:/opt/dlake"
     environment:
@@ -18,10 +18,12 @@ services:
     networks:
       infra:
 
-
   auth-iioat:
     image: registry.ignitial.io/ignitial/auth:1.0.0
     container_name: auth-iioat
+    volumes:
+      - /home/vandrito/Documents/Projects/iio/services/auth/server:/opt/auth/server
+      - /home/vandrito/Documents/Projects/iio/services/auth/node_modules:/opt/auth/node_modules
     ports:
       - "20199:20199"
     environment:

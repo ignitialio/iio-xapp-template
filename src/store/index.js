@@ -5,16 +5,20 @@ var storeInstance
 
 export function getStore(Vue) {
   if (storeInstance) return storeInstance
-  console.log('creating new store...')
+  
   Vue.use(Vuex)
 
   const state = {
-    user: null
+    user: null,
+    menuItems: []
   }
 
   const mutations = {
     user(state, value) {
       state.user = value
+    },
+    menuItems(state, value) {
+      state.menuItems = value
     }
   }
 

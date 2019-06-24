@@ -24,20 +24,21 @@ module.exports = {
   data: {
     /* name of the main service that provides data access */
     service: 'dlake',
+    /* additional collections */
+    collections: [{
+      name: 'notifications'
+    }, {
+      /* example */
+      name: 'myitems'
+    }],
     _unified: true
   },
   /* auth service information */
   auth: {
     /* name of the main service that provides authentication control */
-    service: 'auth'
+    service: 'auth',
+    _unified: true
   },
   i18n: require('./i18n'),
-  unified: require('./unified'),
-  appMenu: require('./appmenu'),
-  offline: {
-    activated: false,
-    dbName: process.env.DB_NAME || 'ignitialio',
-    collections: [ 'users' ],
-    _unified: true
-  }
+  unified: require('./unified')
 }

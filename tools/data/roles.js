@@ -18,13 +18,13 @@ module.exports = {
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
     },
-    'bob': {
+    'dlake:notifications': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
     },
-    'ted': {
+    'dlake:myitems': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
@@ -50,13 +50,13 @@ module.exports = {
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
     },
-    'bob': {
-      'create:any': [ '*' ],
+    'dlake:notifications': {
+      'create:own': [ '*' ],
       'read:any': [ '*' ],
-      'update:any': [ '*' ],
-      'delete:any': [ '*' ]
+      'update:own': [ '*' ],
+      'delete:own': [ '*' ]
     },
-    'ted': {
+    'dlake:myitems': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
@@ -78,12 +78,12 @@ module.exports = {
       'update:own': [ '*' ],
       'delete:own': [ '*' ]
     },
-    'bob': {
-      'read:any': [ '*' ],
-      'update:any': [ '*' ],
-      'delete:any': [ '*' ]
+    'dlake:notifications': {
+      'create:own': [ '*' ],
+      'read:own': [ '*' ],
+      'delete:own': [ '*' ]
     },
-    'ted': {
+    'dlake:myitems': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
       'update:any': [ '*' ],
@@ -101,11 +101,11 @@ module.exports = {
     'dlake:users': {
       'read:any': [ '_id', 'name' ]
     },
-    'bob': {
-      'read:any': [ '*' ]
-    },
-    'ted': {
+    'dlake:notifications': {
       'read:own': [ '*' ]
+    },
+    'dlake:myitems': {
+      'read:any': [ '*' ]
     }
   }
 }

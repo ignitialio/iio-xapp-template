@@ -5,7 +5,7 @@
       tw-border-b tw-border-yellow-300
       tw-text-gray-700 hover:tw-text-yellow-700 hover:tw-bg-gray-100
       tw-cursor-pointer tw-select-none"
-    :class="{ 'tw-text-yellow-500': iSelected }"
+    :class="{ 'tw-text-yellow-600': item.selected }"
     @click="handleClick">
     <i class="material-icons tw-text-6xl">{{ item.icon }}</i>
     <span class="tw-m-4">{{ $t(item.title) }}</span>
@@ -16,30 +16,18 @@
 export default {
   name: 'ig-menuitem',
   props: {
-    item: {},
-    selected: {
-      type: Boolean,
-      default: false
-    }
+    item: {}
   },
   data: () => {
     return {
-      iSelected: false
     }
   },
   watch: {
-    selected: function(val) {
-      this.iSelected = val
-    }
   },
   methods: {
     handleClick() {
+      this.item.selected = true
       this.$emit('select', this.item)
-      this.$emit('update:selected', !this.iSelected)
-      
-      if (this.item.event) {
-        this.$services.emit('signout')
-      }
     }
   },
   mounted() {

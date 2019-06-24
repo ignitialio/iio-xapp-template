@@ -9,7 +9,6 @@ export default {
   name: 'ig-list',
   data: () => {
     return {
-
     }
   },
   methods: {
@@ -23,7 +22,7 @@ export default {
 
 <style scoped>
 .list-layout {
-
+  height: calc(100% - 0px);
 }
 
 @media screen and (max-width: 800px) {

@@ -26,7 +26,6 @@ import uiPlugin from './plugins/ui.plugin'
 
 import storeModule from './store/store.module'
 
-import Main from './views/Main.vue'
 // -----------------------------------------------------------------------------
 
 // Vue configuration
@@ -54,7 +53,7 @@ Vue.use(configPlugin)
 Vue.use(uiPlugin)
 
 // initialize components
-
+// ...
 
 // waiting for asyncrounous plugins to be ready (here i18n)
 Vue.prototype.$utils
@@ -66,10 +65,10 @@ Vue.prototype.$utils
     ...App
   })
 
-  app.$services.waitForService('auth').then(async authService => {
+  app.$services.waitForService(app.$config.auth.service).then(async authService => {
     try {
-      if (localStorage.token) {
-        await authService.authenticate(localStorage.token)
+      if (localStorage.getItem('token')) {
+        await authService.authenticate(localStorage.getItem('token'))
         console.log('authenticated')
       } else {
         app.$ws.resetLocalCredentials()

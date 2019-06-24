@@ -1,16 +1,14 @@
 <template>
-  <transition name="fade">
-    <div v-if="ready" class="main-layout tw-w-full tw-h-full">
+  <div class="main-layout tw-w-full">
 
-    </div>
-  </transition>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      ready: false
+
     }
   },
   watch: {},
@@ -19,8 +17,6 @@ export default {
   computed: {},
   methods: {},
   mounted() {
-    this.ready = true
-
     // wait for login
     this.$services.waitForProperty(this.$store.state, 'user').then(async () => {
       let myunified = await this.$services.waitForService('myunified')
@@ -33,6 +29,14 @@ export default {
       // check service access
       result = await myunified.myProtectedServiceMethod()
     }).catch(err => console.log(err))
+
+    this.$services.waitForService(this.$config.data.service + ':notifications')
+      .then(notificationsCollection => {
+        notificationsCollection.dPut({
+          text: 'Tralalalalallalalalallal bip bip',
+          username: this.$store.state.user.login.username
+        }).catch(err => console.log(err))
+      }).catch(err => console.log(err))
   },
   beforeDestroy() {
 
@@ -42,5 +46,6 @@ export default {
 
 <style>
 .main-layout {
+  height: calc(100% - 0px);
 }
 </style>

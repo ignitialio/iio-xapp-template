@@ -1,25 +1,24 @@
 <template>
-  <div class="listitem-layout tw-w-full tw-h-12
+  <div :id="id" class="listitem-layout tw-w-full tw-h-12
       tw-flex
       tw-border-b tw-border-yellow-300
       tw-text-gray-700 hover:tw-text-yellow-700 hover:tw-bg-gray-100
       tw-cursor-pointer tw-select-none"
-    :class="{ 'tw-bg-yellow-700 tw-text-white' : iSelected }"
+    :class="{ 'tw-bg-yellow-700 tw-text-white' : selected }"
     @click="handleClick">
 
-    <div v-if="$utils.getByPath(item, pictureProperty) || picture"
+    <div v-if="picture"
       class="tw-flex tw-justify-center tw-items-center tw-w-12 tw-h-12">
-      <img v-if="$utils.getByPath(item, pictureProperty)"
-        class="tw-w-8 tw-h-8" :src="$utils.getByPath(item, pictureProperty)"/>
       <img v-if="picture"
-        class="tw-w-8 tw-h-8" :src="picture"/>
+        class="tw-w-8 tw-h-8" :class="{ 'tw-rounded-full': avatar }"
+        :src="picture"/>
     </div>
 
     <div class="listitem-text tw-mx-4 tw-w-full tw-flex tw-flex-col tw-justify-center tw-overflow-hidden">
-      <div class="tw-font-bold tw-w-full">{{ $t($utils.getByPath(item, titleProperty)) }}</div>
-      <div v-if="$utils.getByPath(item, subtitleProperty)"
-        class="ig-ellipsis tw-w-full tw-text-xs tw-h-4">
-        {{ $t($utils.getByPath(item, subtitleProperty)) }}</div>
+      <div class="tw-font-bold tw-w-full">{{ $t(title) }}</div>
+      <div v-if="subtitle"
+        class="ig-ellipsis tw-w-full tw-text-xs tw-h-4 tw-overflow-hidden">
+        {{ $t(subtitle) }}</div>
     </div>
   </div>
 </template>
@@ -32,34 +31,22 @@ export default {
       type: Boolean
     },
     picture: {},
-    pictureProperty: {
-      type: String,
-      default: 'picture'
-    },
-    titleProperty: {
-      type: String,
-      default: 'title'
-    },
-    subtitleProperty: {
-      type: String,
-      default: 'subtitle'
-    },
-    item: {}
+    title: String,
+    subtitle: String,
+    item: {},
+    avatar: Boolean
   },
   data: () => {
     return {
-      iSelected: false
+      id: 'li_' + Math.random().toString(36).slice(2)
     }
   },
   watch: {
-    selected: function(val) {
-      this.iSelected = val
-    }
   },
   methods: {
     handleClick() {
       this.$emit('select', this.item)
-      this.$emit('update:selected', !this.iSelected)
+      this.$emit('update:selected', !this.selected)
     }
   },
   mounted() {

@@ -18,16 +18,16 @@
         </div>
         <div class="tw-m-2 tw-text-gray-200">
           <div class="tw-text-lg">
-            {{ $store.state.user.name.first + ' ' + $store.state.user.name.last }}
+            {{ user.name.first + ' ' + user.name.last }}
           </div>
-          <div class="tw-text-sm">{{ $store.state.user.email }}</div>
+          <div class="tw-text-sm">{{ user.email }}</div>
         </div>
       </div>
 
-      <ig-list :items="menuItems" @select="handleSelected">
+      <ig-list>
         <ig-menuitem
           v-for="(item, index) in menuItems" :key="index"
-          :item="item" @select="handleSelected"></ig-menuitem>
+          :item="item" @select="handleSelect"></ig-menuitem>
       </ig-list>
     </div>
   </div>
@@ -39,6 +39,7 @@ import _ from 'lodash'
 export default {
   name: 'ig-sidedrawer',
   props: {
+    /* manage open/close status */
     value: {
       type: Boolean,
       default: false
@@ -46,64 +47,48 @@ export default {
     header: {
       type: Boolean,
       default: true
-    }
+    },
+    menuItems: {
+      type: Array
+    },
+    user: Object
   },
   data: () => {
     return {
-      menuItems: []
     }
   },
   methods: {
     handleClose() {
+      // close drawer
       this.$emit('input', false)
     },
-    handleSelected(e) {
+    handleSelect(item) {
+      // close drawer
       this.$emit('input', false)
-      if (e.path) {
-        this.$router.push(e.path)
-      }
-      console.log(JSON.stringify(e, null, 2))
-    },
-    handleMenuItemsAdd(items) {
-      let routes = []
-      for (let item of items) {
-        let idx = _.findIndex(this.menuItems, e => e.path === item.path)
-        if (idx === -1) {
-          this.menuItems.push(item)
-          if (item.route) {
-            routes.push(item.route)
-          }
-        }
+
+      let itemsToUnselect = _.filter(this.menuItems, e => e.title !== item.title)
+
+      if (itemsToUnselect) {
+        _.each(itemsToUnselect, e => {
+          e.selected = false
+        })
       }
 
-      if (routes.length > 0) {
-        this.$router.addRoutes(routes)
+      // if associated route
+      if (item.route && item.route.path) {
+        console.log(item.route.path)
+        this.$router.push(item.route.path)
       }
-    },
-    handleMenuItemsRemove(items) {
-      for (let item of items) {
-        let idx = _.findIndex(this.menuItems, e => e.path === item.path)
 
-        if (idx) {
-          this.menuItems.splice(idx, 1)
-        }
+      // if event to trig
+      if (item.event) {
+        this.$services.emit(item.event)
       }
     }
   },
   mounted() {
-    this._listeners = {
-      onMenuItemsAdd: this.handleMenuItemsAdd.bind(this),
-      onMenuItemsRemove: this.handleMenuItemsRemove.bind(this)
-    }
-
-    this.menuItems = this.$config.appMenu.items
-
-    this.$services.on('app:menu:add', this._listeners.onMenuItemsAdd)
-    this.$services.on('app:menu:remove', this._listeners.onMenuItemsRemove)
   },
   beforeDestroy() {
-    this.$services.off('app:menu:add', this._listeners.onMenuItemsAdd)
-    this.$services.off('app:menu:remove', this._listeners.onMenuItemsRemove)
   }
 }
 </script>
