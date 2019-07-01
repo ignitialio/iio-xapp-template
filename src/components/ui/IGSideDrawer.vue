@@ -16,9 +16,12 @@
           <img class="tw-w-12 tw-h-12"
             :src="$store.state.user.picture.medium"/>
         </div>
+
         <div class="tw-m-2 tw-text-gray-200">
-          <div class="tw-text-lg">
-            {{ user.name.first + ' ' + user.name.last }}
+          <div class="tw-flex tw-items-center tw-text-lg">
+            <div>{{ user.name.first + ' ' + user.name.last }}</div>
+            <i v-if="user.role === 'admin'"
+              class="tw-ml-4 material-icons">supervisor_account</i>
           </div>
           <div class="tw-text-sm">{{ user.email }}</div>
         </div>

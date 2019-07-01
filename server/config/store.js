@@ -17,22 +17,12 @@ if (S3_ENDPOINT.match('.amazonaws.')) {
     (S3_PORT ? ':' + S3_PORT : '') + '/' + S3_BUCKET
 }
 
-// ACCESS secrets
-var S3_ACCESS_KEY_ID = process.env.S3_ACCESS_KEY_ID
-var S3_SECRET_ACESS_KEY = process.env.S3_SECRET_ACESS_KEY
-
-// get from docker secrets
-if (!S3_ACCESS_KEY_ID || !S3_SECRET_ACESS_KEY) {
-  S3_ACCESS_KEY_ID = fs.readFileSync('/run/secrets/s3_access_key_id', 'utf8').replace('\n', '')
-  S3_SECRET_ACESS_KEY = fs.readFileSync('/run/secrets/s3_secret_access_key', 'utf8').replace('\n', '')
-}
-
 module.exports = {
   minio: {
     endPoint: S3_ENDPOINT,
     useSSL: S3_SECURE,
-    accessKey: S3_ACCESS_KEY_ID,
-    secretKey: S3_SECRET_ACESS_KEY,
+    accessKey: process.env.S3_ACCESS_KEY_ID,
+    secretKey: process.env.S3_SECRET_ACESS_KEY,
     port: S3_PORT,
     region: S3_REGION
   },

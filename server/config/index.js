@@ -26,6 +26,8 @@ module.exports = {
     service: 'dlake',
     /* additional collections */
     collections: [{
+      name: 'schemas'
+    }, {
       name: 'notifications'
     }, {
       /* example */

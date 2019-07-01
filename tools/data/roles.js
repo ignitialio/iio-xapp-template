@@ -24,6 +24,12 @@ module.exports = {
       'update:any': [ '*' ],
       'delete:any': [ '*' ]
     },
+    'dlake:schemas': {
+      'create:any': [ '*' ],
+      'read:any': [ '*' ],
+      'update:any': [ '*' ],
+      'delete:any': [ '*' ]
+    },
     'dlake:myitems': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
@@ -56,6 +62,12 @@ module.exports = {
       'update:own': [ '*' ],
       'delete:own': [ '*' ]
     },
+    'dlake:schemas': {
+      'create:any': [ '*' ],
+      'read:any': [ '*' ],
+      'update:any': [ '*' ],
+      'delete:any': [ '*' ]
+    },
     'dlake:myitems': {
       'create:any': [ '*' ],
       'read:any': [ '*' ],
@@ -77,6 +89,12 @@ module.exports = {
       'read:any': [ '*' ],
       'update:own': [ '*' ],
       'delete:own': [ '*' ]
+    },
+    'dlake:schemas': {
+      'create:any': [ '*' ],
+      'read:any': [ '*' ],
+      'update:any': [ '*' ],
+      'delete:any': [ '*' ]
     },
     'dlake:notifications': {
       'create:own': [ '*' ],
@@ -103,6 +121,9 @@ module.exports = {
     },
     'dlake:notifications': {
       'read:own': [ '*' ]
+    },
+    'dlake:schemas': {
+      'read:any': [ '*' ]
     },
     'dlake:myitems': {
       'read:any': [ '*' ]

@@ -27,7 +27,12 @@ async function run() {
     console.log('connected to ' + url)
 
     let db = client.db()
-    let userRoles = await users(db)
+    let userRoles
+    if (process.env.POPULATE_ALL) {
+      console.log('will reset users')
+      userRoles = await users(db)
+    }
+
     await roles(userRoles)
     console.log('populate done')
     client.close()

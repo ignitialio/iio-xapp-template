@@ -80,6 +80,16 @@ export default {
     },
     handleNotification(data) {
       console.log('notification', data)
+    },
+    checkIfAdminRole() {
+      this.$utils.waitForProperty(this.$store.state, 'user').then(user => {
+        this.$services.waitForService(this.$config.auth.service).then(auth => {
+          auth.role(user.login.username).then(role => {
+            user.role = role
+            this.$store.commit('user', user)
+          }).catch(err => console.log('failed to get user\'s role'))
+        })
+      }).catch(err => console.log('not connected user'))
     }
   },
   mounted() {
@@ -140,6 +150,9 @@ export default {
     this.$services.on('app:signin', info => {
       this.$store.commit('user', info.user)
       localStorage.setItem('token', info.token)
+      // determine if admin role when login
+      this.checkIfAdminRole()
+
       this.$router.push('/')
     })
 
@@ -151,6 +164,9 @@ export default {
 
     this.$ws.socket.on('service:event:dlake:notifications:add',
       this.handleNotification)
+
+    // determine if admin role when authentication without login
+    this.checkIfAdminRole()
   },
   computed: {
   }

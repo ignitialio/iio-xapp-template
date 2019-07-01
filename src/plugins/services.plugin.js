@@ -4,7 +4,7 @@ export default {
   install:
     function (Vue) {
       let services = new Services(Vue.prototype.$ws.socket)
-      services.initialize()
+      services.initialize(Vue)
       Vue.prototype.$services = services
     }
 }

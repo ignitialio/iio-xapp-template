@@ -1,17 +1,25 @@
 <template>
-  <div :id="id" class="users-layout tw-w-full">
-    <div class="left-panel lg:tw-w-1/3 tw-relative">
+  <div :id="id" class="users-layout tw-w-full tw-flex">
+    <div class="left-panel tw-w-full lg:tw-w-1/3 tw-relative">
       <ig-progressbar v-if="loading"
         indeterminate class="tw-absolute"></ig-progressbar>
       <ig-list class="list">
         <ig-listitem v-for="(user, index) in users" :key="index"
-          :item="user" @select="selected = $event"
+          :item="user" @select="handleSelect"
           :title="user.name.first + ' ' + user.name.last"
           :subtitle="user.email"
           :picture="user.picture.medium"
-          avatar
-          @outDown="handleScroll"></ig-listitem>
+          avatar></ig-listitem>
       </ig-list>
+    </div>
+
+    <div class="right-panel tw-hidden lg:tw-block
+      lg:tw-w-2/3 tw-p-4
+      tw-overflow-y-auto tw-relative">
+      <ig-form v-if="!!schema"
+        :data="selected" name="user" :schema.sync="schema"
+        :editable="$store.state.user.role === 'admin'">
+      </ig-form>
     </div>
   </div>
 </template>
@@ -27,7 +35,34 @@ export default {
       ready: false,
       users: [],
       selected: null,
-      loading: false
+      loading: false,
+      schema: null
+    }
+  },
+  watch: {
+    selected: {
+      handler: function(val) {
+        this.schema = this.$utils.generateJSONSchema('user', val)
+      },
+      deep: true
+    },
+    schema: {
+      handler: function(val) {
+        this.$db.collection('schemas').then(schemas => {
+          if (val.$schema) {
+            val._schema = val.$schema
+            delete val.$schema
+          }
+          
+          schemas.dPut({
+            name: 'users',
+            schema: val
+          }).then(response => {
+            console.log('users schema updated', response)
+          }).catch(err => console.log(err))
+        })
+      },
+      deep: true
     }
   },
   methods: {
@@ -44,6 +79,9 @@ export default {
         _.slice(this.usersData, this.nextIndex, this.nextIndex + 100))
       this.nextIndex += 100
       setTimeout(() => this.loading = false, 500)
+    },
+    handleSelect(item) {
+      this.selected = item
     }
   },
   mounted() {
@@ -51,15 +89,14 @@ export default {
     listEl.addEventListener('scroll', this.handleScroll.bind(this))
 
     // wait for users data service
-    this.$services.waitForService(this.$config.data.service + ':users')
-      .then(usersCollection => {
-        this.ready = true
-        usersCollection.dFind({}).then(docs => {
-          this.usersData = docs
-          this.nextIndex = 0
-          this.showNextElements()
-        }).catch(err => console.log(err))
+    this.$db.collection('users').then(users => {
+      this.ready = true
+      users.dFind({}).then(docs => {
+        this.usersData = docs
+        this.nextIndex = 0
+        this.showNextElements()
       }).catch(err => console.log(err))
+    }).catch(err => console.log(err))
   }
 
 }
@@ -71,6 +108,10 @@ export default {
 }
 
 .left-panel {
+  height: calc(100% - 0px);
+}
+
+.right-panel {
   height: calc(100% - 0px);
 }
 

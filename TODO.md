@@ -1,0 +1,2 @@
+- dlake: create index from options
+- dlake: check dlake response for _id grabbing => needs to return id

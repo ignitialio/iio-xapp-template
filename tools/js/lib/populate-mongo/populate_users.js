@@ -105,3 +105,14 @@ exports.populate = async db => {
     console.log(err)
   }
 }
+
+exports.get = async db => {
+  try {
+    let users = db.collection('users')
+
+    let all = await users.find({})
+    return all
+  } catch (err) {
+    console.log(err)
+  }
+}

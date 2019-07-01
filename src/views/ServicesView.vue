@@ -89,7 +89,7 @@ export default {
       }).catch(err => console.log(err))
     }).catch(err => console.log(err))
 
-    this.$services.waitForService(this.$config.data.service + ':users').then(users => {
+    this.$db.collection('users').then(users => {
       users.dFind({ }).then(result => {
         console.log('users', result.length)
       }).catch(err => console.log(err))

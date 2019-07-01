@@ -20,6 +20,7 @@ import i18nPlugin from './plugins/i18n.plugin'
 import configPlugin from './plugins/config.plugin'
 import utilsPlugin from './plugins/utils.plugin'
 import uiPlugin from './plugins/ui.plugin'
+import dbPlugin from './plugins/db.plugin'
 
 // -----------------------------------------------------------------------------
 // Specific imports
@@ -51,6 +52,7 @@ Vue.use(modulesPlugin)
 Vue.use(i18nPlugin)
 Vue.use(configPlugin)
 Vue.use(uiPlugin)
+Vue.use(dbPlugin)
 
 // initialize components
 // ...
