@@ -30,11 +30,21 @@ export default {
       result = await myunified.myProtectedServiceMethod()
     }).catch(err => console.log(err))
 
-    this.$services.waitForService(this.$config.data.service + ':notifications')
+    this.$db.collection('notifications')
       .then(notificationsCollection => {
         notificationsCollection.dPut({
           text: 'Tralalalalallalalalallal bip bip',
+          level: 'notification',
           username: this.$store.state.user.login.username
+        }).then(response => {
+          let _id = response[0]._id
+          notificationsCollection.dUpdate({ _id: _id }, {
+            text: 'Tralalilalalilalilalilala bop bop',
+            level: 'warning',
+            username: this.$store.state.user.login.username
+          }).then(response => {
+            console.log(response)
+          }).catch(err => console.log(err))
         }).catch(err => console.log(err))
       }).catch(err => console.log(err))
   },

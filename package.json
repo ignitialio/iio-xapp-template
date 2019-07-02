@@ -21,8 +21,8 @@
     "cache:clean": "rimraf -rf ./node_modules/.cache/babel-loader/*"
   },
   "dependencies": {
-    "@ignitial/iio-app-client": "^5.0.1",
-    "@ignitial/iio-app-server": "^5.0.0",
+    "@ignitial/iio-app-client": "^5.1.0",
+    "@ignitial/iio-app-server": "^5.1.0",
     "babel-polyfill": "^6.26.0",
     "d3": "^5.9.7",
     "material-design-icons": "^3.0.1",

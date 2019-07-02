@@ -1,2 +1,7 @@
 - dlake: create index from options
-- dlake: check dlake response for _id grabbing => needs to return id
+- dlake: check dlake response for __id__ grabbing => needs to return id
+- manage notifications
+- manage id on update events
+- cache roles -> clean cache
+- bson with client
+- manage rpc timeout client side
