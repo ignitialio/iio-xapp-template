@@ -37,7 +37,7 @@ export default {
           level: 'notification',
           username: this.$store.state.user.login.username
         }).then(response => {
-          let _id = response[0]._id
+          let _id = response._id
           notificationsCollection.dUpdate({ _id: _id }, {
             text: 'Tralalilalalilalilalilala bop bop',
             level: 'warning',

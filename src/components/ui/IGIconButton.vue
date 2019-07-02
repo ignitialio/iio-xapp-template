@@ -2,17 +2,27 @@
   <div class="tw-cursor-pointer tw-select-none
     tw-flex
     tw-justify-center tw-items-center"
-    :class="{ 'tw-w-10 tw-h-10' : size === 'small',
-      'tw-w-12 tw-h-12' : size === 'medium',
-      'tw-w-16 tw-h-16' : size === 'large',
-      'hover:tw-text-yellow-500 active:tw-text-yellow-600': type,
+    :class="{ 'tw-w-10 tw-h-10' : size === 'small' && !fab,
+      'tw-w-12 tw-h-12' : size === 'medium' && !fab,
+      'tw-w-16 tw-h-16' : size === 'large' && !fab,
+      'tw-m-2 tw-w-8 tw-h-8' : size === 'small' && fab,
+      'tw-m-2 tw-w-10 tw-h-10' : size === 'medium' && fab,
+      'tw-m-2 tw-w-12 tw-h-12' : size === 'large' && fab,
+      'hover:tw-text-yellow-500 active:tw-text-yellow-600': type && !fab,
+      'tw-absolute tw-bg-yellow-500 tw-text-gray-200 hover:tw-text-yellow-400 hover:tw-bg-yellow-700 tw-rounded-full tw-overflow-hidden': fab,
       'iconbut': src }"
     @click="handleClick">
 
-    <i v-if="type" class="material-icons"
-      :class="{ 'tw-text-2xl' : size === 'small',
-        'tw-text-4xl' : size === 'medium',
-        'tw-text-6xl' : size === 'large' }">{{ type }}</i>
+    <div class="tw-absolute tw-flex tw-justify-center tw-items-center"
+      :class="{ 'tw-w-10 tw-h-10' : size === 'small',
+        'tw-w-12 tw-h-12' : size === 'medium',
+        'tw-w-16 tw-h-16' : size === 'large' }">
+      <i v-if="type"
+        class="material-icons tw-absolute tw-flex tw-justify-center tw-items-center"
+        :class="{ 'tw-text-2xl tw-w-6 tw-h-6 tw-p-1' : size === 'small',
+          'tw-text-4xl tw-w-8 tw-h-8 tw-p-1' : size === 'medium',
+          'tw-text-6xl tw-w-10 tw-h-10 tw-p-1' : size === 'large' }">{{ type }}</i>
+    </div>
 
     <img v-if="src" :src="src"
       :class="{ 'tw-w-6 tw-h-6' : size === 'small',
@@ -26,6 +36,9 @@ export default {
   name: 'ig-iconbutton',
   props: {
     type: String,
+    fab: {
+      type: Boolean
+    },
     size: {
       type: String,
       default: 'medium'

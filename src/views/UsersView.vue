@@ -16,10 +16,15 @@
     <div class="right-panel tw-hidden lg:tw-block
       lg:tw-w-2/3 tw-p-4
       tw-overflow-y-auto tw-relative">
-      <ig-form v-if="!!schema"
+      <ig-form v-if="!!selected && !!schema"
         :data="selected" name="user" :schema.sync="schema"
         :editable="$store.state.user.role === 'admin'">
       </ig-form>
+
+      <ig-iconbutton v-if="schemaModified"
+        class="tw-absolute tw-right-0 tw-bottom-0"
+        type="save_alt" fab
+        @click="handleSaveSchema"></ig-iconbutton>
     </div>
   </div>
 </template>
@@ -36,31 +41,26 @@ export default {
       users: [],
       selected: null,
       loading: false,
-      schema: null
+      schema: null,
+      schemaModified: false
     }
   },
   watch: {
     selected: {
       handler: function(val) {
-        this.schema = this.$utils.generateJSONSchema('user', val)
+        if (!this.schema) {
+          this.schema = this.$utils.generateJSONSchema('user', val)
+          this.schemaModified = true
+        }
       },
       deep: true
     },
     schema: {
       handler: function(val) {
-        this.$db.collection('schemas').then(schemas => {
-          if (val.$schema) {
-            val._schema = val.$schema
-            delete val.$schema
-          }
-          
-          schemas.dPut({
-            name: 'users',
-            schema: val
-          }).then(response => {
-            console.log('users schema updated', response)
-          }).catch(err => console.log(err))
-        })
+        if (this.lastSchemaChksum !== $j(val)) {
+          this.lastSchemaChksum = $j(val)
+          this.schemaModified = true
+        }
       },
       deep: true
     }
@@ -80,8 +80,59 @@ export default {
       this.nextIndex += 100
       setTimeout(() => this.loading = false, 500)
     },
-    handleSelect(item) {
+    async handleSelect(item) {
       this.selected = item
+    },
+    handleSaveSchema() {
+      this.$db.collection('schemas').then(async schemas => {
+        try  {
+          let schema = _.cloneDeep(this.schema)
+          schema._schema = this.schema.$schema
+          delete schema.$schema
+
+          let usersSchema = await schemas.dGet({ name: 'users' })
+
+          if (usersSchema) {
+            let response = await schemas.dUpdate({ name: 'users' }, {
+              name: 'users',
+              schema: schema
+            })
+
+            console.log('users schema updated', response)
+          } else {
+            let response = schemas.dPut({
+              name: 'users',
+              schema: schema
+            })
+
+            console.log('users schema created', response)
+          }
+
+          this.schemaModified = false
+        } catch (err) {
+          console.log(err)
+        }
+      }).catch(err => console.log(err))
+    },
+    loadSchema() {
+      this.$db.collection('schemas').then(async schemas => {
+        try {
+          let usersSchema = await schemas.dGet({ name: 'users' })
+
+          if (usersSchema) {
+            // manage naming restrictions for Mongo
+            usersSchema.schema.$schema = usersSchema.schema._schema
+            delete usersSchema.schema._schema
+            this.schema = usersSchema.schema
+            this.lastSchemaChksum = $j(this.schema)
+            setTimeout(() => this.schemaModified = false, 50)
+          } else {
+            console.log('no users schema saved')
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      }).catch(err => console.log(err))
     }
   },
   mounted() {
@@ -97,6 +148,8 @@ export default {
         this.showNextElements()
       }).catch(err => console.log(err))
     }).catch(err => console.log(err))
+
+    this.loadSchema()
   }
 
 }

@@ -74,12 +74,12 @@ Vue.prototype.$utils
         console.log('authenticated')
       } else {
         app.$ws.resetLocalCredentials()
-        app.$router.push('/signin')
+        app.$router.push('/login')
       }
     } catch (err) {
-      app.$ws.resetLocalCredentials()
-      app.$router.push('/signin')
       console.log(err)
+      app.$ws.resetLocalCredentials()
+      setTimeout(() => app.$router.push('/login'))
     }
   })
 
