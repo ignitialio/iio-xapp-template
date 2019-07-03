@@ -10,6 +10,8 @@ import IGPaper from '../components/ui/IGPaper.vue'
 import IGProgressBar from '../components/ui/IGProgressBar.vue'
 import IGForm from '../components/ui/IGForm.vue'
 import IGSelect from '../components/ui/IGSelect.vue'
+import IGTags from '../components/ui/IGTags.vue'
+import IGDialog from '../components/ui/IGDialog.vue'
 
 export default {
   install:
@@ -26,5 +28,7 @@ export default {
       Vue.component('ig-progressbar', IGProgressBar)
       Vue.component('ig-form', IGForm)
       Vue.component('ig-select', IGSelect)
+      Vue.component('ig-tags', IGTags)
+      Vue.component('ig-dialog', IGDialog)
     }
 }

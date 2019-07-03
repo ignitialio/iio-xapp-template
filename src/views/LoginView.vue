@@ -14,6 +14,7 @@ export default {
   mounted() {
     // wait for authentication service
     this.$services.waitForService(this.$config.auth.service).then(authService => {
+      this.$ws.resetLocalCredentials()
       this.ready = true
     }).catch(err => console.log(err))
   }

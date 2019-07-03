@@ -9,7 +9,7 @@
       'tw-m-2 tw-w-10 tw-h-10' : size === 'medium' && fab,
       'tw-m-2 tw-w-12 tw-h-12' : size === 'large' && fab,
       'hover:tw-text-yellow-500 active:tw-text-yellow-600': type && !fab,
-      'tw-absolute tw-bg-yellow-500 tw-text-gray-200 hover:tw-text-yellow-400 hover:tw-bg-yellow-700 tw-rounded-full tw-overflow-hidden': fab,
+      'tw-bg-yellow-500 tw-text-gray-200 hover:tw-text-yellow-400 hover:tw-bg-yellow-700 tw-rounded-full tw-overflow-hidden': fab,
       'iconbut': src }"
     @click="handleClick">
 

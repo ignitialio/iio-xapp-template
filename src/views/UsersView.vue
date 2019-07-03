@@ -22,7 +22,7 @@
       </ig-form>
 
       <ig-iconbutton v-if="schemaModified"
-        class="tw-absolute tw-right-0 tw-bottom-0"
+        class="tw-fixed tw-right-0 tw-bottom-0"
         type="save_alt" fab
         @click="handleSaveSchema"></ig-iconbutton>
     </div>

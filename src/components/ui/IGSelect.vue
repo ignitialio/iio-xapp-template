@@ -5,7 +5,7 @@
       tw-border tw-border-yellow-300
       tw-text-gray-700 hover:tw-text-yellow-700
       focus:tw-border focus:tw-border-yellow-600">
-      <select class=" tw-p-4
+      <select class=" tw-pt-4 tw-pl-4 tw-pr-4
         hover:tw-bg-gray-100 tw-outline-none tw-bg-transparent"
         :value="value" @change="handleChange">
         <option v-for="(opt, index) in values" :key="opt.value"
