@@ -6,7 +6,9 @@
 
     <ig-toolbar v-if="$store.state.user"
       class="tw-absolute tw-top-0 tw-left-0"
-      :showMenu.sync="showMenu"></ig-toolbar>
+      :showMenu.sync="showMenu">
+      <component v-if="contextComponent" :is="contextComponent"></component>
+    </ig-toolbar>
 
     <ig-toolbar v-if="!$store.state.user" onlyTitleBar
       class="tw-absolute tw-top-0 tw-left-0">
@@ -23,11 +25,17 @@
 import UsersView from '../views/UsersView.vue'
 import ServicesView from '../views/ServicesView.vue'
 
+import UsersContextBar from '../views/context/UsersContextBar.vue'
+
 export default {
   data: () => {
     return {
-      showMenu: false
+      showMenu: false,
+      contextComponent: null
     }
+  },
+  components: {
+    'users-ctx': UsersContextBar
   },
   methods: {
     handleMenuItemsAdd(items) {
@@ -167,6 +175,12 @@ export default {
 
     // determine if admin role when authentication without login
     this.checkIfAdminRole()
+
+    // context bar management
+    this.$services.on('app:context:bar', ctxComponent => {
+      // use null to disable
+      this.contextComponent = ctxComponent
+    })
   },
   computed: {
   }

@@ -1,4 +1,5 @@
 import IGIconButton from '../components/ui/IGIconButton.vue'
+import IGIconSwitch from '../components/ui/IGIconSwitch.vue'
 import IGIcon from '../components/ui/IGIcon.vue'
 import IGSideDrawer from '../components/ui/IGSideDrawer.vue'
 import IGToolbar from '../components/ui/IGToolbar.vue'
@@ -17,6 +18,7 @@ export default {
   install:
     function (Vue) {
       Vue.component('ig-iconbutton', IGIconButton)
+      Vue.component('ig-iconswitch', IGIconSwitch)
       Vue.component('ig-icon', IGIcon)
       Vue.component('ig-sidedrawer', IGSideDrawer)
       Vue.component('ig-toolbar', IGToolbar)

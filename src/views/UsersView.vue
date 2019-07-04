@@ -18,7 +18,7 @@
       tw-overflow-y-auto tw-relative">
       <ig-form v-if="!!selected && !!schema"
         :data="selected" name="user" :schema.sync="schema"
-        :editable="$store.state.user.role === 'admin'">
+        :editable="$store.state.user.role === 'admin' && editMode">
       </ig-form>
 
       <ig-iconbutton v-if="schemaModified"
@@ -42,7 +42,8 @@ export default {
       selected: null,
       loading: false,
       schema: null,
-      schemaModified: false
+      schemaModified: false,
+      editMode: false
     }
   },
   watch: {
@@ -133,9 +134,16 @@ export default {
           console.log(err)
         }
       }).catch(err => console.log(err))
+    },
+    handleEditMode(val) {
+      this.editMode = val
     }
   },
   mounted() {
+    this._listeners = {
+      onEditMode: this.handleEditMode.bind(this)
+    }
+
     let listEl = d3.select('#' + this.id).select('.list').node()
     listEl.addEventListener('scroll', this.handleScroll.bind(this))
 
@@ -150,8 +158,15 @@ export default {
     }).catch(err => console.log(err))
 
     this.loadSchema()
-  }
 
+    this.$services.emit('app:context:bar', 'users-ctx')
+
+    this.$services.on('view:users:edit', this._listeners.onEditMode)
+  },
+  beforeDestroy() {
+    this.$services.emit('app:context:bar', null)
+    this.$services.off('view:users:edit', this._listeners.onEditMode)
+  }
 }
 </script>
 

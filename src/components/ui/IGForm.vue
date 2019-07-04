@@ -2,7 +2,9 @@
   <div class="form tw-flex tw-flex-col tw-m-1">
     <div v-if="isObjectId(data) || isPrimitive(data) || data === null"
       class="tw-flex tw-items-end tw-w-full">
-      <ig-input class="tw-w-1/2" :readonly="isReadOnly"
+      <ig-input class="tw-w-1/2"
+        :readonly="isReadOnly"
+        :disabled=" editable"
         v-model="data" :label="$t(name)"/>
 
       <ig-select v-if="editable" :label="$t('Type')"
@@ -21,7 +23,8 @@
       class="tw-flex tw-flex-col tw-w-full"
       v-for="(prop, index) in properties" :key="index">
       <div v-if="!isObjectId(data[prop]) && !isPrimitive(data[prop])"
-        class="tw-mt-4 tw-mb-4 tw-font-bold">
+        class="tw-mt-4 tw-mb-4 tw-font-bold"
+        :class="{ 'tw-text-gray-400': editable }">
         {{ $t(prop) }}</div>
 
       <ig-form :name="prop"

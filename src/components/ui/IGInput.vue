@@ -1,15 +1,26 @@
 <template>
   <div class="input-layout
-    tw-flex tw-flex-col tw-m-2 hover:tw-bg-gray-100"
-    :class="{ 'tw-bg-gray-200 hover:tw-bg-gray-200': readonly }">
-    <label v-if="label" class="tw-text-xs tw-select-none
-      tw-text-yellow-600">{{ label }}</label>
+    tw-flex tw-flex-col tw-m-2 "
+    :class="{
+      'tw-bg-gray-200 hover:tw-bg-gray-200': readonly && !disabled,
+      'hover:tw-bg-gray-100': !readonly && !disabled
+    }">
+    <label v-if="label"
+      class="tw-text-xs tw-select-none"
+      :class="{
+        'tw-text-gray-400': disabled,
+        'tw-text-yellow-600': !disabled
+      }">{{ label }}</label>
 
     <input :readonly="readonly" :disabled="disabled"
       class="tw-outline-none t-h-8 tw-bg-transparent
-        tw-border-b tw-border-yellow-300
-        tw-text-gray-700"
-      :class="{ 'hover:tw-text-yellow-700 focus:tw-border focus:tw-border-yellow-600': !readonly }"
+        tw-border-b tw-text-gray-700"
+      :class="{
+        'tw-border-yellow-300': !disabled,
+        'tw-border-gray-300': disabled,
+        'hover:tw-text-yellow-700 focus:tw-border focus:tw-border-yellow-600': !readonly && !disabled,
+        'tw-text-gray-300': disabled
+      }"
       :value="value" @input="handleInput"
       :type="type"/>
   </div>
