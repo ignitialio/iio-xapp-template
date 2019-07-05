@@ -131,7 +131,9 @@ module.exports = {
       'Un elemento estó actualizado por un altro cliente' ],
     'Element has been removed remotely': [
       'Un élément a été supprimé par un client tiers',
-      'Un elemento estó actualizado por un altro cliente' ]
+      'Un elemento estó actualizado por un altro cliente' ],
+    'Property detailed type': [ 'Type détaillé de la propriété',
+      'Tipo detallado de propiedad' ]
   },
   _unified: true
 }

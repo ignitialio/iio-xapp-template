@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-cursor-pointer tw-select-none
+  <div class="iconbutton-layout tw-cursor-pointer tw-select-none
     tw-flex
     tw-justify-center tw-items-center"
     :class="{ 'tw-w-10 tw-h-10' : size === 'small' && !fab,
@@ -32,12 +32,18 @@
 </template>
 
 <script>
+import * as d3 from 'd3'
+
 export default {
   name: 'ig-iconbutton',
   props: {
     type: String,
     fab: {
       type: Boolean
+    },
+    color: {
+      type: String,
+      default: 'gray'
     },
     size: {
       type: String,
@@ -55,6 +61,8 @@ export default {
     }
   },
   mounted() {
+    d3.select(this.$el).classed('tw-text-' +
+      this.color + '-600', true)
   },
   computed: {
   }

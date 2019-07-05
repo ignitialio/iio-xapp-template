@@ -1,6 +1,6 @@
 <template>
-  <div class="select-layout">
-    <div class="select-layout--container tw-m-2
+  <div class="select-layout tw-p-2">
+    <div class="select-layout--container
       tw-overflow-hidden
       tw-border tw-border-yellow-300
       tw-text-gray-700 hover:tw-text-yellow-700
@@ -14,8 +14,8 @@
     </div>
 
     <label v-if="label"
-      style="top: 0.70em; left: 0.75em;"
-      class="tw-absolute tw-top-0
+      style="top: 0.7em; left: 0.75em;"
+      class="tw-absolute
         tw-text-xs tw-select-none
         tw-text-yellow-600">{{ label }}</label>
   </div>

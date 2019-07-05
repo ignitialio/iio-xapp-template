@@ -2,20 +2,30 @@
   <div class="form tw-flex tw-flex-col tw-m-1">
     <div v-if="isObjectId(data) || isPrimitive(data) || data === null"
       class="tw-flex tw-items-end tw-w-full">
-      <ig-input class="tw-w-1/2"
+
+      <ig-select v-if="schema.enum" :label="$t(name)"
+        :values="schema.enum" v-model="data"
+        class="tw-w-1/2 tw-mr-4"></ig-select>
+
+      <div v-else-if="schema._meta.type === 'image'"
+        class="tw-w-1/2 tw-flex tw-items-center tw-mr-4">
+        <ig-iconbutton type="photo_size_select_actual"></ig-iconbutton>
+        <ig-input class="tw-flex-1" readonly v-model="data" :label="$t(name)"/>
+      </div>
+
+      <ig-input v-else
+        class="tw-w-1/2"
         :readonly="isReadOnly"
-        :disabled=" editable"
+        :disabled="editable"
         v-model="data" :label="$t(name)"/>
 
+      <!-- Meta edition: editing the schema -->
       <ig-select v-if="editable" :label="$t('Type')"
         :values="jsonTypes" v-model="schema.type"
         class="tw-w-1/4"></ig-select>
 
-      <ig-tags v-if="schema.enum" :label="$t('Enum')"
-        v-model="schema.enum" class="tw-w-1/4"></ig-tags>
-
-      <div v-if="hasSettings" class="tw-mb-1 tw-flex tw-items-centered">
-        <ig-iconbutton type="settings"></ig-iconbutton>
+      <div v-if="hasSettings && editable" class="tw-mb-1 tw-flex tw-items-centered">
+        <ig-iconbutton type="settings" @click="handleSettingsDialog"></ig-iconbutton>
       </div>
     </div>
 
@@ -32,6 +42,39 @@
         class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
         :data="data[prop]" :editable="editable">{{ data[prop] }}</ig-form>
     </div>
+
+    <ig-dialog v-model="settingsDialog"
+      :title="$t('Property detailed type')"
+      :subtitle="name"
+      width="60%" height="60%">
+      <ig-vbox verticalFill>
+        <ig-hbox class="settings-content">
+          <ig-vbox class="settings-left tw-w-1/4">
+            <ig-select v-if="schema._meta" :label="$t('Type')"
+              :values="strTypes" v-model="schema._meta.type"></ig-select>
+          </ig-vbox>
+
+          <ig-vbox class="settings-right tw-w-3/4 tw-p-1">
+            <div class="tw-flex tw-flex-col" v-if="schema.enum">
+              <div class="tw-flex tw-items-center"
+                v-for="item in schema.enum">
+                <ig-input v-model="item.value" :label="$t('Value')"></ig-input>
+                <ig-input v-model="item.text" :label="$t('Text')"></ig-input>
+                <ig-iconbutton type="clear" color="red"
+                  @click="handleRemoveEnumItem"></ig-iconbutton>
+              </div>
+              <ig-iconbutton type="add" color="green"
+                @click="handleAddEnumItem"></ig-iconbutton>
+            </div>
+          </ig-vbox>
+        </ig-hbox>
+
+        <ig-hbox class="tw-h-16 tw-justify-end tw-items-center">
+          <ig-iconbutton type="check" color="green" @click="handleCloseSettings">
+          </ig-iconbutton>
+        </ig-hbox>
+      </ig-vbox>
+    </ig-dialog>
   </div>
 </template>
 
@@ -51,6 +94,19 @@ export default {
     },
     schema: {
       type: Object
+    }
+  },
+  watch: {
+    'schema._meta._type': function(val) {
+      switch (val) {
+        case 'enum':
+          this._schema.enum = []
+          break
+        default:
+
+      }
+
+      this.$emit('update:schema', this._schema)
     }
   },
   data: () => {
@@ -81,29 +137,22 @@ export default {
           text: 'ObjectID'
         }
       ],
-      itemTypes: [
-        {
-          value: 'string',
-          text: 'String'
-        },
-        {
-          value: 'number',
-          text: 'Number'
-        },
-        {
-          value: 'image',
-          text: 'Image'
-        },
+      strTypes: [
         {
           value: 'enum',
           text: 'Enum'
         },
         {
-          value: 'objectid',
-          text: 'ObjectID'
+          value: 'file',
+          text: 'File'
+        },
+        {
+          value: 'image',
+          text: 'Image'
         }
       ],
-      hasSettings: false
+      hasSettings: false,
+      settingsDialog: false
     }
   },
   methods: {
@@ -145,21 +194,54 @@ export default {
     updateSettings() {
       if (!this._schema._meta) return
       switch (this._schema._meta.type) {
-        case 'enum':
-          this.hasSettings = true
+        case 'null':
+          this.hasSettings = false
           break
+        case 'objectid':
+          this.hasSettings = false
+          break
+        default:
+          this.hasSettings = true
       }
+    },
+    handleSettingsDialog() {
+      this.settingsDialog = true
+    },
+    handleCloseSettings() {
+      this.settingsDialog = false
+    },
+    handleAddEnumItem() {
+      this._schema.enum.push({
+        text: '',
+        value: null
+      })
+
+      this.$emit('update:schema', this._schema)
+    },
+    handleRemoveEnumItem(item) {
+      let index = this._schema.enum.indexOf(item)
+      this._schema.enum.splice(index, 1)
+
+      this.$emit('update:schema', this._schema)
     }
   },
   mounted() {
     this._schema = _.cloneDeep(this.schema)
+    this._schema._meta = this._schema._meta || { type: null }
+    this.$emit('update:schema', this._schema)
+
     this.updateSettings()
     // console.log($j(this.schema))
+
+    if (this.$parent) {
+      if (this.$parent.$options._componentTag === 'ig-form') {
+        this._formRootElement = this.$parent._formRootElement
+      } else {
+        this._formRootElement = this.$parent.$el
+      }
+    }
   },
   computed: {
-    selectedType() {
-      return this.schema._meta ? this.schema._meta.type : null
-    },
     properties() {
       if (this.data && (typeof this.data === 'object' || Array.isArray(this.data))) {
         return Object.keys(this.data)
@@ -177,6 +259,10 @@ export default {
 <style scoped>
 .form {
 
+}
+
+.settings-content {
+  flex: 1;
 }
 
 @media screen and (max-width: 800px) {

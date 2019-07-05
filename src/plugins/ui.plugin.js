@@ -13,6 +13,9 @@ import IGForm from '../components/ui/IGForm.vue'
 import IGSelect from '../components/ui/IGSelect.vue'
 import IGTags from '../components/ui/IGTags.vue'
 import IGDialog from '../components/ui/IGDialog.vue'
+import IGBox from '../components/ui/IGBox.vue'
+import IGHBox from '../components/ui/IGHBox.vue'
+import IGVBox from '../components/ui/IGVBox.vue'
 
 export default {
   install:
@@ -32,5 +35,8 @@ export default {
       Vue.component('ig-select', IGSelect)
       Vue.component('ig-tags', IGTags)
       Vue.component('ig-dialog', IGDialog)
+      Vue.component('ig-box', IGBox)
+      Vue.component('ig-hbox', IGHBox)
+      Vue.component('ig-vbox', IGVBox)
     }
 }

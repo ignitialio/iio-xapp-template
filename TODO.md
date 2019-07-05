@@ -3,3 +3,4 @@
 - cache roles -> clean cache
 - manage rpc timeout client side
 - drawer: move user info to properties for generalization
+- view password

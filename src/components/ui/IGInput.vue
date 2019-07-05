@@ -1,12 +1,13 @@
 <template>
-  <div class="input-layout
-    tw-flex tw-flex-col tw-m-2 "
+  <div class="input-layout)
+    tw-flex tw-flex-col tw-m-2"
     :class="{
       'tw-bg-gray-200 hover:tw-bg-gray-200': readonly && !disabled,
       'hover:tw-bg-gray-100': !readonly && !disabled
     }">
+
     <label v-if="label"
-      class="tw-text-xs tw-select-none"
+      class="input-label tw-top-0 tw-left-0 tw-text-xs tw-select-none"
       :class="{
         'tw-text-gray-400': disabled,
         'tw-text-yellow-600': !disabled
@@ -68,6 +69,12 @@ export default {
 .input-layout {
 
 }
+
+.input-label {
+  top: 0!important;
+  left: 0!important;
+}
+
 @media screen and (max-width: 800px) {
 
 }
