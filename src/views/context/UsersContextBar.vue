@@ -1,6 +1,7 @@
 <template>
   <div class="userctx-layout tw-w-full tw-flex tw-justify-end">
-    <ig-iconswitch v-model="editMode" size="small" type="edit"></ig-iconswitch>
+    <ig-iconswitch v-model="editMode" size="small" type="edit"
+      :title="$t('Schema edit')"></ig-iconswitch>
   </div>
 </template>
 

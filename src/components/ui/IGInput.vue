@@ -1,6 +1,5 @@
 <template>
-  <div class="input-layout)
-    tw-flex tw-flex-col tw-m-2"
+  <div class="input-layout tw-flex tw-flex-col tw-m-2"
     :class="{
       'tw-bg-gray-200 hover:tw-bg-gray-200': readonly && !disabled,
       'hover:tw-bg-gray-100': !readonly && !disabled
@@ -13,17 +12,44 @@
         'tw-text-yellow-600': !disabled
       }">{{ label }}</label>
 
-    <input :readonly="readonly" :disabled="disabled"
-      class="tw-outline-none t-h-8 tw-bg-transparent
-        tw-border-b tw-text-gray-700"
-      :class="{
-        'tw-border-yellow-300': !disabled,
-        'tw-border-gray-300': disabled,
-        'hover:tw-text-yellow-700 focus:tw-border focus:tw-border-yellow-600': !readonly && !disabled,
-        'tw-text-gray-300': disabled
-      }"
-      :value="value" @input="handleInput"
-      :type="type"/>
+    <div class="tw-flex">
+      <input v-if="type !== 'password' || (type === 'password' && !showPassword)"
+        :readonly="readonly" :disabled="disabled"
+        class="tw-w-full tw-outline-none t-h-8 tw-bg-transparent
+          tw-border-b tw-text-gray-700"
+        :class="{
+          'tw-border-yellow-300': !disabled,
+          'tw-border-gray-300': disabled,
+          'hover:tw-text-yellow-700 focus:tw-border focus:tw-border-yellow-600': !readonly && !disabled,
+          'tw-text-gray-300': disabled,
+          'input-pwd': type === 'password'
+        }"
+        :value="value" @input="handleInput"
+        :type="type"/>
+
+      <input v-if="type === 'password' && showPassword"
+        :readonly="readonly" :disabled="disabled"
+        class="tw-outline-none t-h-8 tw-bg-transparent
+          tw-border-b tw-text-gray-700"
+        :class="{
+          'tw-border-yellow-300': !disabled,
+          'tw-border-gray-300': disabled,
+          'hover:tw-text-yellow-700 focus:tw-border focus:tw-border-yellow-600': !readonly && !disabled,
+          'tw-text-gray-300': disabled,
+          'input-pwd': type === 'password'
+        }"
+        :value="value" @input="handleInput"
+        type="text"/>
+
+      <div v-if="type === 'password'"
+        class="tw-flex tw-justify-center tw-items-center tw-cursor-pointer
+          tw-text-gray-500">
+        <i v-if="showPassword" class="material-icons tw-text-base tw-w-6"
+          @click="showPassword = !showPassword">visibility_off</i>
+        <i v-if="!showPassword" class="material-icons tw-text-base tw-w-6"
+          @click="showPassword = !showPassword">visibility</i>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -50,6 +76,7 @@ export default {
   },
   data: () => {
     return {
+      showPassword: false
     }
   },
   methods: {
@@ -66,13 +93,8 @@ export default {
 </script>
 
 <style scoped>
-.input-layout {
-
-}
-
-.input-label {
-  top: 0!important;
-  left: 0!important;
+.input-pwd {
+  width: 177px;
 }
 
 @media screen and (max-width: 800px) {

@@ -2,9 +2,11 @@
   <div :id="id" class="listitem-layout tw-w-full tw-h-12
       tw-flex
       tw-border-b tw-border-yellow-300
-      tw-text-gray-700 hover:tw-text-yellow-700 hover:tw-bg-gray-100
       tw-cursor-pointer tw-select-none"
-    :class="{ 'tw-bg-yellow-700 tw-text-white' : selected }"
+    :class="{
+      'tw-text-gray-700 hover:tw-text-yellow-700 hover:tw-bg-gray-100': !selected,
+      'tw-bg-yellow-600 hover:tw-text-yellow-300 tw-text-white' : selected 
+    }"
     @click="handleClick">
 
     <div v-if="picture"

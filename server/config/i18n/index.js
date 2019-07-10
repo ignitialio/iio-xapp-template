@@ -133,7 +133,12 @@ module.exports = {
       'Un élément a été supprimé par un client tiers',
       'Un elemento estó actualizado por un altro cliente' ],
     'Property detailed type': [ 'Type détaillé de la propriété',
-      'Tipo detallado de propiedad' ]
+      'Tipo detallado de propiedad' ],
+    'Schema edit': [ 'Edition de schéma', 'Edición del schema' ],
+    'File upload': [ 'Chargement de fichier', 'Carga de archivo' ],
+    'Drop file(s) here or click to browse': [
+      'Déposer le(s) fichier(s) ici ou cliquer pour parcourir',
+      'Envíe el (los) archivo (s) aquí o haga clic para navegar' ]
   },
   _unified: true
 }

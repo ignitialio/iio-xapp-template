@@ -5,7 +5,7 @@
         indeterminate class="tw-absolute"></ig-progressbar>
       <ig-list class="list">
         <ig-listitem v-for="(user, index) in users" :key="index"
-          :item="user" @select="handleSelect"
+          :item="user" @select="handleSelect" :selected="selected === user"
           :title="user.name.first + ' ' + user.name.last"
           :subtitle="user.email"
           :picture="user.picture.medium"
@@ -13,18 +13,25 @@
       </ig-list>
     </div>
 
-    <div class="right-panel tw-hidden lg:tw-block
-      lg:tw-w-2/3 tw-p-4
-      tw-overflow-y-auto tw-relative">
-      <ig-form v-if="!!selected && !!schema"
-        :data="selected" name="user" :schema.sync="schema"
-        :editable="$store.state.user.role === 'admin' && editMode">
-      </ig-form>
+    <div class="right-panel tw-hidden
+      lg:tw-w-2/3 lg:tw-flex tw-flex-row">
+      <div class="user-settings tw-p-4 tw-overflow-y-auto">
+        <ig-form v-if="!!selected && !!schema"
+          v-model="selected" name="user" :schema.sync="schema"
+          :editable="$store.state.user.role === 'admin' && editMode">
+        </ig-form>
+      </div>
 
-      <ig-iconbutton v-if="schemaModified"
-        class="tw-fixed tw-right-0 tw-bottom-0"
-        type="save_alt" fab
-        @click="handleSaveSchema"></ig-iconbutton>
+      <ig-vbox class="actions-bar tw-w-10 tw-justify-end tw-shadow" verticalFill
+        :class="{ 'open': userModified || schemaModified}">
+        <ig-iconbutton v-if="schemaModified"
+          type="save_alt" size="small"
+          @click="handleSaveSchema"></ig-iconbutton>
+
+        <ig-iconbutton v-if="userModified"
+          type="save_alt" size="small"
+          @click="handleSaveUser"></ig-iconbutton>
+      </ig-vbox>
     </div>
   </div>
 </template>
@@ -43,6 +50,7 @@ export default {
       loading: false,
       schema: null,
       schemaModified: false,
+      userModified: false,
       editMode: false
     }
   },
@@ -52,6 +60,11 @@ export default {
         if (!this.schema) {
           this.schema = this.$utils.generateJSONSchema('user', val)
           this.schemaModified = true
+        }
+
+        if ($j(val) !== this.lastUserChksum) {
+          this.lastUserChksum = $j(val)
+          this.userModified = true
         }
       },
       deep: true
@@ -82,6 +95,8 @@ export default {
       setTimeout(() => this.loading = false, 500)
     },
     async handleSelect(item) {
+      this.lastUserChksum = $j(item)
+      this.userModified = false
       this.selected = item
     },
     handleSaveSchema() {
@@ -137,6 +152,16 @@ export default {
     },
     handleEditMode(val) {
       this.editMode = val
+    },
+    handleSaveUser() {
+      this.$db.collection('users').then(async users => {
+        try {
+          await users.dUpdate({ _id: this.selected._id }, this.selected)
+          this.userModified = true
+        } catch (err) {
+          console.log(err)
+        }
+      }).catch(err => console.log(err))
     }
   },
   mounted() {
@@ -183,11 +208,25 @@ export default {
   height: calc(100% - 0px);
 }
 
+.user-settings {
+  height: calc(100% - 0px);
+  flex: 1;
+}
+
+.actions-bar {
+  margin-right: -40px;
+  transition: margin-right 1s ease;
+}
+
+.actions-bar.open {
+  margin-right: 0;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 1s;
 }
 
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 </style>

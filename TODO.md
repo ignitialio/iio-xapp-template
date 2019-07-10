@@ -3,4 +3,5 @@
 - cache roles -> clean cache
 - manage rpc timeout client side
 - drawer: move user info to properties for generalization
-- view password
+- manage multiple changes for selected users
+- hide items in igform

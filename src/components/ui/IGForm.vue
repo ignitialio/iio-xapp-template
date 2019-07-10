@@ -1,38 +1,46 @@
 <template>
   <div class="form tw-flex tw-flex-col tw-m-1">
-    <div v-if="isObjectId(data) || isPrimitive(data) || data === null"
+    <div v-if="isObjectId(value) || isPrimitive(value) || value === null"
       class="tw-flex tw-items-end tw-w-full">
 
-      <ig-select v-if="schema.enum" :label="$t(name)"
-        :values="schema.enum" v-model="data"
-        class="tw-w-1/2 tw-mr-4"></ig-select>
+      <div :class="{
+          'tw-w-1/2': editable,
+          'tw-w-3/4': !editable
+        }">
+        <ig-select v-if="schema.enum" :label="$t(name)"
+          :values="schema.enum" :value="value" @input="handleInput"
+          class="tw-mr-4"></ig-select>
 
-      <div v-else-if="schema._meta.type === 'image'"
-        class="tw-w-1/2 tw-flex tw-items-center tw-mr-4">
-        <ig-iconbutton type="photo_size_select_actual"></ig-iconbutton>
-        <ig-input class="tw-flex-1" readonly v-model="data" :label="$t(name)"/>
+        <ig-fileinput v-else-if="schema._meta && schema._meta.type === 'image'"
+          :value="value" @input="handleInput"
+          :label="$t(name)"/>
+
+        <ig-fileinput v-else-if="schema._meta && schema._meta.type === 'file'"
+          :value="value" @input="handleInput"
+          :label="$t(name)"/>
+
+        <ig-input v-else
+          :readonly="isReadOnly"
+          :disabled="editable"
+          :value="value" @input="handleInput"
+          :label="$t(name)"/>
       </div>
-
-      <ig-input v-else
-        class="tw-w-1/2"
-        :readonly="isReadOnly"
-        :disabled="editable"
-        v-model="data" :label="$t(name)"/>
 
       <!-- Meta edition: editing the schema -->
       <ig-select v-if="editable" :label="$t('Type')"
         :values="jsonTypes" v-model="schema.type"
         class="tw-w-1/4"></ig-select>
 
-      <div v-if="hasSettings && editable" class="tw-mb-1 tw-flex tw-items-centered">
+      <div v-if="hasSettings && editable"
+        class="tw-mb-1 tw-flex tw-items-centered">
         <ig-iconbutton type="settings" @click="handleSettingsDialog"></ig-iconbutton>
       </div>
     </div>
 
-    <div v-if="data && !isPrimitive(data) && schema.properties"
+    <div v-if="value && !isPrimitive(value) && schema.properties"
       class="tw-flex tw-flex-col tw-w-full"
       v-for="(prop, index) in properties" :key="index">
-      <div v-if="!isObjectId(data[prop]) && !isPrimitive(data[prop])"
+      <div v-if="!isObjectId(value[prop]) && !isPrimitive(value[prop])"
         class="tw-mt-4 tw-mb-4 tw-font-bold"
         :class="{ 'tw-text-gray-400': editable }">
         {{ $t(prop) }}</div>
@@ -40,22 +48,25 @@
       <ig-form :name="prop"
         :schema.sync="schema.properties[prop]"
         class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
-        :data="data[prop]" :editable="editable">{{ data[prop] }}</ig-form>
+        v-model="value[prop]" :editable="editable">{{ value[prop] }}</ig-form>
     </div>
 
+    <!-- Schema settings dialog -->
     <ig-dialog v-model="settingsDialog"
       :title="$t('Property detailed type')"
       :subtitle="name"
       width="60%" height="60%">
       <ig-vbox verticalFill>
-        <ig-hbox class="settings-content">
+        <ig-hbox class="dialog-content">
           <ig-vbox class="settings-left tw-w-1/4">
             <ig-select v-if="schema._meta" :label="$t('Type')"
               :values="strTypes" v-model="schema._meta.type"></ig-select>
+            {{ schema }}
           </ig-vbox>
 
           <ig-vbox class="settings-right tw-w-3/4 tw-p-1">
-            <div class="tw-flex tw-flex-col" v-if="schema.enum">
+            <div class="tw-flex tw-flex-col"
+              v-if="schema.enum && schema._meta.type === 'enum'">
               <div class="tw-flex tw-items-center"
                 v-for="item in schema.enum">
                 <ig-input v-model="item.value" :label="$t('Value')"></ig-input>
@@ -65,6 +76,24 @@
               </div>
               <ig-iconbutton type="add" color="green"
                 @click="handleAddEnumItem"></ig-iconbutton>
+            </div>
+
+            <div class="tw-flex tw-flex-col"
+              v-else-if="schema._meta.type === 'file'">
+              <ig-input v-model="schema._meta.maxSize" type="number"
+                :label="$t('Max size')"></ig-input>
+
+              <ig-input v-model="schema._meta.fileType"
+                :label="$t('File type')"></ig-input>
+            </div>
+
+            <div class="tw-flex tw-flex-col"
+              v-else-if="schema._meta.type === 'image'">
+              <ig-input v-model="schema._meta.maxSize" type="number"
+                :label="$t('Max size')"></ig-input>
+
+              <ig-select v-if="schema._meta" :label="$t('Image type')"
+                :values="imageTypes" v-model="schema._meta.imageType"></ig-select>
             </div>
           </ig-vbox>
         </ig-hbox>
@@ -88,7 +117,7 @@ export default {
     name: {
       type: String
     },
-    data: {},
+    value: {},
     editable: {
       type: Boolean
     },
@@ -97,11 +126,22 @@ export default {
     }
   },
   watch: {
-    'schema._meta._type': function(val) {
+    'schema._meta.type': function(val) {
+      this._schema._meta.type = val
+
       switch (val) {
         case 'enum':
-          this._schema.enum = []
+          this._schema.enum = this._schema.enum || []
           break
+
+        case 'image':
+          this._schema._meta.imageType = 'image/*'
+          break
+
+        case 'file':
+          this._schema._meta.fileType = '*/*'
+          break
+
         default:
 
       }
@@ -151,6 +191,28 @@ export default {
           text: 'Image'
         }
       ],
+      imageTypes: [
+        {
+          value: 'image/jpeg',
+          text: 'JPEG'
+        },
+        {
+          value: 'image/png',
+          text: 'PNG'
+        },
+        {
+          value: 'image/webp',
+          text: 'WebP'
+        },
+        {
+          value: 'image/svg+xml',
+          text: 'SVG'
+        },
+        {
+          value: 'image/*',
+          text: 'All'
+        }
+      ],
       hasSettings: false,
       settingsDialog: false
     }
@@ -159,7 +221,7 @@ export default {
     isObjectId(obj) {
       let isObjectId = obj ? obj._bsontype === 'ObjectID' : false
 
-      if (isObjectId && (this.data === obj)) {
+      if (isObjectId && (this.value === obj)) {
         this.handleType('objectid')
       }
 
@@ -168,28 +230,16 @@ export default {
     isPrimitive(obj) {
       return !(typeof obj === 'object') && !Array.isArray(obj)
     },
-    async handleType(val) {
-      try {
-        await this.$utils.waitForProperty(this, '_schema')
-        this._schema._meta = this._schema._meta || { type: null }
-        this._schema._meta.type = val
+    handleType(val) {
+      switch (val) {
+        case 'objectid':
+          this._schema.readOnly = true
+          break
 
-        switch (val) {
-          case 'objectid':
-            this._schema.readOnly = true
-            break
-
-          case 'enum':
-            this._schema.enum = this._schema.enum || []
-            break
-
-          default:
-        }
-
-        this.$emit('update:schema', this._schema)
-      } catch (err) {
-        console.log(err)
+        default:
       }
+
+      this.$emit('update:schema', this._schema)
     },
     updateSettings() {
       if (!this._schema._meta) return
@@ -223,16 +273,20 @@ export default {
       this._schema.enum.splice(index, 1)
 
       this.$emit('update:schema', this._schema)
+    },
+    handleInput(val) {
+      this.$emit('input', val)
     }
   },
-  mounted() {
+  beforeMount() {
     this._schema = _.cloneDeep(this.schema)
     this._schema._meta = this._schema._meta || { type: null }
     this.$emit('update:schema', this._schema)
-
+  },
+  mounted() {
     this.updateSettings()
-    // console.log($j(this.schema))
 
+    // future use: sets root component for all
     if (this.$parent) {
       if (this.$parent.$options._componentTag === 'ig-form') {
         this._formRootElement = this.$parent._formRootElement
@@ -243,8 +297,8 @@ export default {
   },
   computed: {
     properties() {
-      if (this.data && (typeof this.data === 'object' || Array.isArray(this.data))) {
-        return Object.keys(this.data)
+      if (this.value && (typeof this.value === 'object' || Array.isArray(this.value))) {
+        return Object.keys(this.value)
       }
 
       return []
@@ -261,7 +315,7 @@ export default {
 
 }
 
-.settings-content {
+.dialog-content {
   flex: 1;
 }
 

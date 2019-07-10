@@ -1,12 +1,12 @@
 <template>
   <div class="tw-cursor-pointer tw-select-none
     tw-flex tw-m-2
-    tw-justify-center tw-items-center"
+    tw-justify-center tw-items-center tw-border tw-border-gray-400 tw-rounded-sm"
     :class="{ 'tw-w-8 tw-h-8' : size === 'small',
       'tw-w-10 tw-h-10' : size === 'medium',
       'tw-w-12 tw-h-12' : size === 'large',
       'hover:tw-text-yellow-500 active:tw-text-yellow-600': type && !value,
-      'tw-bg-yellow-500 tw-text-gray-200 hover:tw-text-yellow-400 hover:tw-bg-yellow-700 tw-rounded-full tw-overflow-hidden': value,
+      'tw-bg-yellow-500 tw-text-gray-200 hover:tw-text-yellow-400 hover:tw-bg-yellow-700 tw-overflow-hidden': value,
       'iconbut': src }"
     @click="handleClick">
 

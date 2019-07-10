@@ -5,7 +5,7 @@
       :class="{ 'hidden': showMenu }"></router-view>
 
     <ig-toolbar v-if="$store.state.user"
-      class="tw-absolute tw-top-0 tw-left-0"
+      class="tw-absolute tw-top-0 tw-left-0 tw-shadow"
       :showMenu.sync="showMenu">
       <component v-if="contextComponent" :is="contextComponent"></component>
     </ig-toolbar>
