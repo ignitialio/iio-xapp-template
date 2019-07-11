@@ -7,15 +7,19 @@
           'tw-w-1/2': editable,
           'tw-w-3/4': !editable
         }">
+
         <ig-select v-if="schema.enum" :label="$t(name)"
+          :disabled="editable"
           :values="schema.enum" :value="value" @input="handleInput"
           class="tw-mr-4"></ig-select>
 
         <ig-fileinput v-else-if="schema._meta && schema._meta.type === 'image'"
+          :disabled="editable" :showThumbnail="schema._meta.showThumbnail"
           :value="value" @input="handleInput"
           :label="$t(name)"/>
 
         <ig-fileinput v-else-if="schema._meta && schema._meta.type === 'file'"
+          :disabled="editable"
           :value="value" @input="handleInput"
           :label="$t(name)"/>
 
@@ -46,38 +50,48 @@
         {{ $t(prop) }}</div>
 
       <ig-form :name="prop"
-        :schema.sync="schema.properties[prop]"
+        :schema="schema.properties[prop]"
+        @update:schema="handleUpdateSchema(prop, $event)"
         class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
         v-model="value[prop]" :editable="editable">{{ value[prop] }}</ig-form>
     </div>
 
     <!-- Schema settings dialog -->
-    <ig-dialog v-model="settingsDialog"
+    <ig-dialog ref="settings" v-model="settingsDialog"
       :title="$t('Property detailed type')"
       :subtitle="name"
       width="60%" height="60%">
       <ig-vbox verticalFill>
-        <ig-hbox class="dialog-content">
-          <ig-vbox class="settings-left tw-w-1/4">
-            <ig-select v-if="schema._meta" :label="$t('Type')"
-              :values="strTypes" v-model="schema._meta.type"></ig-select>
-            {{ schema }}
-          </ig-vbox>
+        <ig-hbox verticalFill>
+          <ig-list class="settings-left tw-w-1/3">
+            <ig-listitem-slot class="tw-h-16">
+              <ig-select v-if="schema._meta" :label="$t('Type')"
+                :values="strTypes" v-model="schema._meta.type"></ig-select>
+            </ig-listitem-slot>
+            <ig-listitem-slot class="tw-h-16">
+              <ig-input :label="$t('Pattern')" v-model="schema._meta.pattern"/>
+            </ig-listitem-slot>
+          </ig-list>
 
-          <ig-vbox class="settings-right tw-w-3/4 tw-p-1">
-            <div class="tw-flex tw-flex-col"
+          <ig-vbox class="settings-right tw-w-2/3 tw-p-1" verticalFill>
+            <div class="enums tw-flex tw-flex-col tw-overflow-x-hidden
+              tw-overflow-y-auto tw-mx-2"
               v-if="schema.enum && schema._meta.type === 'enum'">
               <div class="tw-flex tw-items-center"
-                v-for="item in schema.enum">
-                <ig-input v-model="item.value" :label="$t('Value')"></ig-input>
+                v-for="(item, index) in schema.enum" :key="index">
+                <ig-iconbutton v-if="index === schema.enum.length - 1"
+                  type="add" color="green"
+                  @click="handleAddEnumItem"></ig-iconbutton>
+                <div v-else class="tw-w-12 tw-h-6"></div>
+                <ig-input class="tw-w-2/6"
+                  v-model="item.value" :label="$t('Value')"></ig-input>
                 <ig-input v-model="item.text" :label="$t('Text')"></ig-input>
                 <ig-iconbutton type="clear" color="red"
                   @click="handleRemoveEnumItem"></ig-iconbutton>
               </div>
-              <ig-iconbutton type="add" color="green"
-                @click="handleAddEnumItem"></ig-iconbutton>
             </div>
 
+            <!-- Item is File -->
             <div class="tw-flex tw-flex-col"
               v-else-if="schema._meta.type === 'file'">
               <ig-input v-model="schema._meta.maxSize" type="number"
@@ -87,6 +101,7 @@
                 :label="$t('File type')"></ig-input>
             </div>
 
+            <!-- Item is Image -->
             <div class="tw-flex tw-flex-col"
               v-else-if="schema._meta.type === 'image'">
               <ig-input v-model="schema._meta.maxSize" type="number"
@@ -94,6 +109,9 @@
 
               <ig-select v-if="schema._meta" :label="$t('Image type')"
                 :values="imageTypes" v-model="schema._meta.imageType"></ig-select>
+
+              <ig-checkbox :label="$t('Show thumbnail')"
+                v-model="schema._meta.showThumbnail"></ig-checkbox>
             </div>
           </ig-vbox>
         </ig-hbox>
@@ -147,6 +165,9 @@ export default {
       }
 
       this.$emit('update:schema', this._schema)
+    },
+    'schema.enum': function(val) {
+      this.$refs.settings.$forceUpdate()
     }
   },
   data: () => {
@@ -189,6 +210,22 @@ export default {
         {
           value: 'image',
           text: 'Image'
+        },
+        {
+          value: 'date',
+          text: 'Date format'
+        },
+        {
+          value: 'time',
+          text: 'Time format'
+        },
+        {
+          value: 'datetime',
+          text: 'Date and time format sqdqsd qsfqsfqsf s'
+        },
+        {
+          value: null,
+          text: ''
         }
       ],
       imageTypes: [
@@ -267,6 +304,7 @@ export default {
       })
 
       this.$emit('update:schema', this._schema)
+      this.$forceUpdate()
     },
     handleRemoveEnumItem(item) {
       let index = this._schema.enum.indexOf(item)
@@ -276,6 +314,10 @@ export default {
     },
     handleInput(val) {
       this.$emit('input', val)
+    },
+    handleUpdateSchema(prop, val) {
+      this._schema.properties[prop] = val
+      this.$emit('update:schema', this._schema)
     }
   },
   beforeMount() {
@@ -315,8 +357,8 @@ export default {
 
 }
 
-.dialog-content {
-  flex: 1;
+.enums {
+  height: calc(100% - 0px);
 }
 
 @media screen and (max-width: 800px) {

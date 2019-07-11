@@ -13,8 +13,9 @@
         class="input-label tw-top-0 tw-left-0 tw-text-xs tw-select-none"
         :class="{
           'tw-text-gray-400': disabled,
-          'tw-text-yellow-600': !disabled
-        }">{{ label }}</label>
+          'tw-text-yellow-600': !disabled,
+
+        }">{{ label }} {{ showThumbnail }}</label>
 
       <input readonly :disabled="disabled"
         class="tw-outline-none t-h-8 tw-bg-transparent
@@ -23,12 +24,14 @@
           'tw-border-yellow-300': !disabled,
           'tw-border-gray-300': disabled,
           'hover:tw-text-yellow-700 focus:tw-border focus:tw-border-yellow-600': !readonly && !disabled,
-          'tw-text-gray-300': disabled,
-          'input-pwd': type === 'password'
+          'tw-text-gray-300': disabled
         }"
         :value="value"
         type="text"/>
     </div>
+
+    <img v-if="showThumbnail" :src="value"
+      class="tw-ml-1 tw-border tw-border-yellow-300 tw-w-12 tw-h-12"/>
   </div>
 </template>
 
@@ -52,11 +55,9 @@ export default {
     },
     disabled: {
       type: Boolean
-    }
-  },
-  data: () => {
-    return {
-      showPassword: false
+    },
+    showThumbnail: {
+      type: Boolean
     }
   },
   methods: {
@@ -101,6 +102,10 @@ export default {
 <style scoped>
 .input-pwd {
   width: 177px;
+}
+
+.drop-target {
+  flex: 1;
 }
 
 @media screen and (max-width: 800px) {

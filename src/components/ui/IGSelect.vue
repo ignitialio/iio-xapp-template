@@ -1,11 +1,10 @@
 <template>
   <div class="select-layout tw-p-2">
     <div class="select-layout--container
-      tw-overflow-hidden
       tw-border tw-border-yellow-300
       tw-text-gray-700 hover:tw-text-yellow-700
       focus:tw-border focus:tw-border-yellow-600">
-      <select class=" tw-pt-4 tw-pl-4 tw-pr-4
+      <select class="tw-pt-4 tw-pl-4 tw-pr-8
         hover:tw-bg-gray-100 tw-outline-none tw-bg-transparent"
         :value="value" @change="handleChange">
         <option v-for="(opt, index) in values" :key="opt.value"
@@ -78,7 +77,7 @@ export default {
 	-moz-appearance: none;
 	appearance: none;
 
-	width: 110%;
+	width: 100%;
 	/*
 		On est sûr de ne plus voir
 		la flèche native
@@ -86,10 +85,13 @@ export default {
 
 	height: auto;
 
+  overflow-x: hidden;
 	text-overflow: ellipsis;
+  white-space: nowrap;
 	/*
 		On empêche le texte d'aller
 		jusqu'au bout s'il est trop long
+    BUG: no ellipsis showed
 	*/
 }
 

@@ -6,8 +6,10 @@ import IGToolbar from '../components/ui/IGToolbar.vue'
 import IGList from '../components/ui/IGList.vue'
 import IGMenuItem from '../components/ui/IGMenuItem.vue'
 import IGListItem from '../components/ui/IGListItem.vue'
+import IGListItemSlot from '../components/ui/IGListItemSlot.vue'
 import IGInput from '../components/ui/IGInput.vue'
 import IGFileInput from '../components/ui/IGFileInput.vue'
+import IGCheckbox from '../components/ui/IGCheckbox.vue'
 import IGPaper from '../components/ui/IGPaper.vue'
 import IGProgressBar from '../components/ui/IGProgressBar.vue'
 import IGForm from '../components/ui/IGForm.vue'
@@ -29,7 +31,9 @@ export default {
       Vue.component('ig-list', IGList)
       Vue.component('ig-menuitem', IGMenuItem)
       Vue.component('ig-listitem', IGListItem)
+      Vue.component('ig-listitem-slot', IGListItemSlot)
       Vue.component('ig-input', IGInput)
+      Vue.component('ig-checkbox', IGCheckbox)
       Vue.component('ig-fileinput', IGFileInput)
       Vue.component('ig-paper', IGPaper)
       Vue.component('ig-progressbar', IGProgressBar)

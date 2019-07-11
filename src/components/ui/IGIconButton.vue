@@ -61,7 +61,9 @@ export default {
   },
   methods: {
     handleClick(e) {
-      this.$emit('click', e)
+      if (!this.disabled) {
+        this.$emit('click', e)
+      }
     }
   },
   mounted() {

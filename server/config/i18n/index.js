@@ -97,7 +97,7 @@ module.exports = {
     'Helper settings': [ 'Paramètres de l\'assistant', 'Opciones del asistente' ],
     'Any type': [ 'Type quelconque', 'Cualquier tipo' ],
     'File max size': [ 'Taille maximale du fichier', 'Tamaño máximo del archivo' ],
-    'Show thumbnail': [ 'Afficher une miniature', 'Mostrar miniatura' ],
+    'Show thumbnail': [ 'Afficher une vignette', 'Mostrar miniatura' ],
     'Icon': [ 'Icône', 'Icono' ],
     'Group': [ 'Groupe', 'Grupo' ],
     'Edit': [ 'Éditer', 'Editar' ],
@@ -138,7 +138,10 @@ module.exports = {
     'File upload': [ 'Chargement de fichier', 'Carga de archivo' ],
     'Drop file(s) here or click to browse': [
       'Déposer le(s) fichier(s) ici ou cliquer pour parcourir',
-      'Envíe el (los) archivo (s) aquí o haga clic para navegar' ]
+      'Envíe el (los) archivo (s) aquí o haga clic para navegar' ],
+    'Date format': [ 'Format date', 'Formato de fetcha' ],
+    'Time format': [ 'Format heure', 'Formato de hore' ],
+    'Date and time format': [ 'Format date et heure', 'Formato de fetcha y hora' ]
   },
   _unified: true
 }

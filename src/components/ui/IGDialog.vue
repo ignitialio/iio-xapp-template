@@ -13,14 +13,14 @@
         :style="size" @click.prevent.stop="">
 
         <div v-if="title"
-          class="tw-m-1 tw-h-16 tw-bg-yellow-600 tw-flex">
+          class="dialog--header tw-m-1 tw-h-16 tw-bg-yellow-600 tw-flex">
           <div class="tw-m-2 tw-text-gray-200">
             <div class="tw-text-md">{{ title }}</div>
             <div v-if="subtitle" class="tw-text-sm">{{ subtitle }}</div>
           </div>
         </div>
 
-        <div class="dialog-content tw-p-1 tw-w-full">
+        <div class="dialog--content tw-p-1 tw-w-full">
           <slot></slot>
         </div>
       </div>
@@ -83,8 +83,12 @@ export default {
   background-color: rgba(255, 255, 255, 0.95);
 }
 
-.dialog-content {
-  flex: 1;
+.dialog {
+  height: calc(100% - 0px);
+}
+
+.dialog--content {
+  height: calc(100% - 62px);
 }
 
 .fade-enter-active, .fade-leave-active {

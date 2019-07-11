@@ -5,7 +5,7 @@
       tw-cursor-pointer tw-select-none"
     :class="{
       'tw-text-gray-700 hover:tw-text-yellow-700 hover:tw-bg-gray-100': !selected,
-      'tw-bg-yellow-600 hover:tw-text-yellow-300 tw-text-white' : selected 
+      'tw-bg-yellow-600 hover:tw-text-yellow-300 tw-text-white' : selected
     }"
     @click="handleClick">
 
@@ -43,27 +43,16 @@ export default {
       id: 'li_' + Math.random().toString(36).slice(2)
     }
   },
-  watch: {
-  },
   methods: {
     handleClick() {
       this.$emit('select', this.item)
       this.$emit('update:selected', !this.selected)
     }
-  },
-  mounted() {
-    this.$emit('mounted')
-  },
-  computed: {
   }
 }
 </script>
 
 <style scoped>
-.listitem-layout {
-
-}
-
 .listitem-text {
   flex: 1;
 }
