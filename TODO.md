@@ -5,3 +5,4 @@
 - drawer: move user info to properties for generalization
 - manage multiple changes for selected users
 - hide items in igform
+- manage arrays in igform

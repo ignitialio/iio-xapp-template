@@ -19,6 +19,8 @@ import IGDialog from '../components/ui/IGDialog.vue'
 import IGBox from '../components/ui/IGBox.vue'
 import IGHBox from '../components/ui/IGHBox.vue'
 import IGVBox from '../components/ui/IGVBox.vue'
+import IGGeo from '../components/ui/IGGeo.vue'
+import IGFormSettings from '../components/ui/utils/IGFormSettings.vue'
 
 export default {
   install:
@@ -44,5 +46,7 @@ export default {
       Vue.component('ig-box', IGBox)
       Vue.component('ig-hbox', IGHBox)
       Vue.component('ig-vbox', IGVBox)
+      Vue.component('ig-geo', IGGeo)
+      Vue.component('ig-form-settings', IGFormSettings)
     }
 }

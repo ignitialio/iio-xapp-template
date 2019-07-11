@@ -41,87 +41,41 @@
       </div>
     </div>
 
-    <div v-if="value && !isPrimitive(value) && schema.properties"
+    <div v-if="value && !isPrimitive(value) && schema.properties &&
+      schema._meta.type !== 'geopoint'"
       class="tw-flex tw-flex-col tw-w-full"
       v-for="(prop, index) in properties" :key="index">
+
       <div v-if="!isObjectId(value[prop]) && !isPrimitive(value[prop])"
-        class="tw-mt-4 tw-mb-4 tw-font-bold"
-        :class="{ 'tw-text-gray-400': editable }">
-        {{ $t(prop) }}</div>
+        class="tw-flex tw-items-center">
+        <div class="tw-mt-4 tw-mb-4 tw-font-bold"
+          :class="{ 'tw-text-gray-400': editable }">
+          {{ $t(prop) }}</div>
+
+        <div v-if="hasSettings && editable"
+          class="tw-mb-1 tw-flex tw-items-centered">
+          <ig-iconbutton type="settings"
+            @click="handleSettingsDialog(schema.properties[prop])"></ig-iconbutton>
+        </div>
+      </div>
 
       <ig-form :name="prop"
-        :schema="schema.properties[prop]"
+        :schema.sync="schema.properties[prop]"
         @update:schema="handleUpdateSchema(prop, $event)"
         class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
         v-model="value[prop]" :editable="editable">{{ value[prop] }}</ig-form>
     </div>
 
+    <div v-if="schema._meta.type === 'geopoint'"
+      class="tw-flex tw-flex-col tw-w-full">
+      <ig-geo v-if="schema._meta.type === 'geopoint'"
+        :disabled="editable" :marker.sync="value"/>
+    </div>
+
     <!-- Schema settings dialog -->
-    <ig-dialog ref="settings" v-model="settingsDialog"
-      :title="$t('Property detailed type')"
-      :subtitle="name"
-      width="60%" height="60%">
-      <ig-vbox verticalFill>
-        <ig-hbox verticalFill>
-          <ig-list class="settings-left tw-w-1/3">
-            <ig-listitem-slot class="tw-h-16">
-              <ig-select v-if="schema._meta" :label="$t('Type')"
-                :values="strTypes" v-model="schema._meta.type"></ig-select>
-            </ig-listitem-slot>
-            <ig-listitem-slot class="tw-h-16">
-              <ig-input :label="$t('Pattern')" v-model="schema._meta.pattern"/>
-            </ig-listitem-slot>
-          </ig-list>
-
-          <ig-vbox class="settings-right tw-w-2/3 tw-p-1" verticalFill>
-            <div class="enums tw-flex tw-flex-col tw-overflow-x-hidden
-              tw-overflow-y-auto tw-mx-2"
-              v-if="schema.enum && schema._meta.type === 'enum'">
-              <div class="tw-flex tw-items-center"
-                v-for="(item, index) in schema.enum" :key="index">
-                <ig-iconbutton v-if="index === schema.enum.length - 1"
-                  type="add" color="green"
-                  @click="handleAddEnumItem"></ig-iconbutton>
-                <div v-else class="tw-w-12 tw-h-6"></div>
-                <ig-input class="tw-w-2/6"
-                  v-model="item.value" :label="$t('Value')"></ig-input>
-                <ig-input v-model="item.text" :label="$t('Text')"></ig-input>
-                <ig-iconbutton type="clear" color="red"
-                  @click="handleRemoveEnumItem"></ig-iconbutton>
-              </div>
-            </div>
-
-            <!-- Item is File -->
-            <div class="tw-flex tw-flex-col"
-              v-else-if="schema._meta.type === 'file'">
-              <ig-input v-model="schema._meta.maxSize" type="number"
-                :label="$t('Max size')"></ig-input>
-
-              <ig-input v-model="schema._meta.fileType"
-                :label="$t('File type')"></ig-input>
-            </div>
-
-            <!-- Item is Image -->
-            <div class="tw-flex tw-flex-col"
-              v-else-if="schema._meta.type === 'image'">
-              <ig-input v-model="schema._meta.maxSize" type="number"
-                :label="$t('Max size')"></ig-input>
-
-              <ig-select v-if="schema._meta" :label="$t('Image type')"
-                :values="imageTypes" v-model="schema._meta.imageType"></ig-select>
-
-              <ig-checkbox :label="$t('Show thumbnail')"
-                v-model="schema._meta.showThumbnail"></ig-checkbox>
-            </div>
-          </ig-vbox>
-        </ig-hbox>
-
-        <ig-hbox class="tw-h-16 tw-justify-end tw-items-center">
-          <ig-iconbutton type="check" color="green" @click="handleCloseSettings">
-          </ig-iconbutton>
-        </ig-hbox>
-      </ig-vbox>
-    </ig-dialog>
+    <ig-form-settings ref="settings" v-model="settingsDialog"
+      :name="name"
+      :schema.sync="schemaOnEdit"></ig-form-settings>
   </div>
 </template>
 
@@ -198,60 +152,9 @@ export default {
           text: 'ObjectID'
         }
       ],
-      strTypes: [
-        {
-          value: 'enum',
-          text: 'Enum'
-        },
-        {
-          value: 'file',
-          text: 'File'
-        },
-        {
-          value: 'image',
-          text: 'Image'
-        },
-        {
-          value: 'date',
-          text: 'Date format'
-        },
-        {
-          value: 'time',
-          text: 'Time format'
-        },
-        {
-          value: 'datetime',
-          text: 'Date and time format sqdqsd qsfqsfqsf s'
-        },
-        {
-          value: null,
-          text: ''
-        }
-      ],
-      imageTypes: [
-        {
-          value: 'image/jpeg',
-          text: 'JPEG'
-        },
-        {
-          value: 'image/png',
-          text: 'PNG'
-        },
-        {
-          value: 'image/webp',
-          text: 'WebP'
-        },
-        {
-          value: 'image/svg+xml',
-          text: 'SVG'
-        },
-        {
-          value: 'image/*',
-          text: 'All'
-        }
-      ],
       hasSettings: false,
-      settingsDialog: false
+      settingsDialog: false,
+      schemaOnEdit: null
     }
   },
   methods: {
@@ -291,26 +194,14 @@ export default {
           this.hasSettings = true
       }
     },
-    handleSettingsDialog() {
+    handleSettingsDialog(schema) {
+      if (schema) {
+        this.schemaOnEdit = schema
+      } else {
+        this.schemaOnEdit = this.schema
+      }
+      console.log($j(this.schemaOnEdit))
       this.settingsDialog = true
-    },
-    handleCloseSettings() {
-      this.settingsDialog = false
-    },
-    handleAddEnumItem() {
-      this._schema.enum.push({
-        text: '',
-        value: null
-      })
-
-      this.$emit('update:schema', this._schema)
-      this.$forceUpdate()
-    },
-    handleRemoveEnumItem(item) {
-      let index = this._schema.enum.indexOf(item)
-      this._schema.enum.splice(index, 1)
-
-      this.$emit('update:schema', this._schema)
     },
     handleInput(val) {
       this.$emit('input', val)

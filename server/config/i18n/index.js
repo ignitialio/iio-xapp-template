@@ -65,6 +65,7 @@ module.exports = {
     'Value': [ 'Valeur', 'Valor' ],
     '3D view': [ 'Vue 3D', 'Vista 3D' ],
     'Geographical location': [ 'Localisation géographique', 'Ubicación geográfica' ],
+    'Geographical shape': [ 'Forme géographique', 'Forma geográfica' ],
     'Modification done': [ 'Modification réalisée', 'Cambio realizado' ],
     'Do you want to update': [ 'Voulez-vous mettre à jour', '¿Desea actualizar?' ],
     'January': [ 'Janvier', 'Enero' ],
