@@ -111,7 +111,7 @@ export default {
         },
         {
           value: 'datetime',
-          text: 'Date and time format sqdqsd qsfqsfqsf s'
+          text: 'Date and time format'
         },
         {
           value: null,

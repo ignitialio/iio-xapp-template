@@ -37,7 +37,7 @@
 
       <div v-if="hasSettings && editable"
         class="tw-mb-1 tw-flex tw-items-centered">
-        <ig-iconbutton type="settings" @click="handleSettingsDialog"></ig-iconbutton>
+        <ig-iconbutton type="settings" @click="handleSettingsDialog(schema)"></ig-iconbutton>
       </div>
     </div>
 
@@ -69,7 +69,7 @@
     <div v-if="schema._meta.type === 'geopoint'"
       class="tw-flex tw-flex-col tw-w-full">
       <ig-geo v-if="schema._meta.type === 'geopoint'"
-        :disabled="editable" :marker.sync="value"/>
+        :disabled="editable" :marker="value" @update:marker="handleGeoloc"/>
     </div>
 
     <!-- Schema settings dialog -->
@@ -112,6 +112,18 @@ export default {
 
         case 'file':
           this._schema._meta.fileType = '*/*'
+          break
+
+        case 'date':
+          this._schema.format = 'date'
+          break
+
+        case 'time':
+          this._schema.format = 'time'
+          break
+
+        case 'datetime':
+          this._schema.format = 'datetime'
           break
 
         default:
@@ -195,16 +207,23 @@ export default {
       }
     },
     handleSettingsDialog(schema) {
-      if (schema) {
-        this.schemaOnEdit = schema
-      } else {
-        this.schemaOnEdit = this.schema
-      }
+      this.schemaOnEdit = schema
       console.log($j(this.schemaOnEdit))
       this.settingsDialog = true
     },
     handleInput(val) {
       this.$emit('input', val)
+    },
+    handleGeoloc(val) {
+      console.log('GEOLOC', val)
+      if (this._schema.type === 'object') {
+        this.$emit('input', {
+          latitude: val[1],
+          longitude: val[0]
+        })
+      } else {
+        this.$emit('input', val)
+      }
     },
     handleUpdateSchema(prop, val) {
       this._schema.properties[prop] = val
