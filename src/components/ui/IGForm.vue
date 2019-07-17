@@ -11,7 +11,7 @@
         <ig-select v-if="schema.enum" :label="$t(name)"
           :disabled="editable"
           :values="schema.enum" :value="value" @input="handleInput"
-          class="tw-mr-4"></ig-select>
+          class="tw-mr-4"/>
 
         <ig-fileinput v-else-if="schema._meta && schema._meta.type === 'image'"
           :disabled="editable" :showThumbnail="schema._meta.showThumbnail"
@@ -19,6 +19,12 @@
           :label="$t(name)"/>
 
         <ig-fileinput v-else-if="schema._meta && schema._meta.type === 'file'"
+          :disabled="editable"
+          :value="value" @input="handleInput"
+          :label="$t(name)"/>
+
+        <ig-datetime-picker
+          v-else-if="schema._meta && schema._meta.type && schema._meta.type.match(/date|time/)"
           :disabled="editable"
           :value="value" @input="handleInput"
           :label="$t(name)"/>

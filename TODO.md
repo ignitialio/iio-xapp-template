@@ -6,3 +6,4 @@
 - manage multiple changes for selected users
 - hide items in igform
 - manage arrays in igform
+- i18n _language getter
