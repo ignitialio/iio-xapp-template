@@ -31,4 +31,4 @@ export S3_ACCESS_KEY_ID=G4I3RZP3I2AS7EMWQPMZ
 export S3_SECRET_ACESS_KEY=xMzrrXMtnFEOP/K7MDFRA/bPxRfiCYEXOTOTOYEK
 export EMAILER_SMTP_PASS=toto
 
-docker-compose up -d
+docker-compose -f ${PWD}/tools/docker/docker-compose.yml up -d

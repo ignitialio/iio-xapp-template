@@ -21,4 +21,4 @@ export APP_VERSION=$(cat package.json \
 
 echo "app version: ${APP_VERSION}"
 
-docker stack deploy --compose-file docker-compose-sentinel.yml iioat
+docker stack deploy --compose-file ${PWD}/tools/docker/docker-compose-sentinel.yml iioat

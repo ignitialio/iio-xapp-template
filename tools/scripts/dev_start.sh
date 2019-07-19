@@ -24,7 +24,7 @@ echo "app version: ${APP_VERSION}"
 export IIOS_NAMESPACE=ignitialio
 export MONGODB_DBNAME=ignitialio
 
-docker-compose -f docker-compose-dev.yml up -d
+docker-compose -f ${PWD}/tools/docker/docker-compose-dev.yml up -d
 
 export S3_SECURE=false
 export S3_ENDPOINT=localhost
@@ -34,4 +34,5 @@ export S3_SECRET_ACESS_KEY=xMzrrXMtnFEOP/K7MDFRA/bPxRfiCYEXOTOTOYEK
 
 export EMAILER_SMTP_PASS=toto
 
+sleep 1
 npm-run-all --parallel server:start client:serve

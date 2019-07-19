@@ -24,8 +24,12 @@
 <script>
 import UsersView from '../views/UsersView.vue'
 import ServicesView from '../views/ServicesView.vue'
+import ListView from '../views/ListView.vue'
+
+import MyItemsView from '../views/MyItemsView.vue'
 
 import UsersContextBar from '../views/context/UsersContextBar.vue'
+import MyItemsContextBar from '../views/context/MyItemsContextBar.vue'
 
 export default {
   data: () => {
@@ -35,7 +39,8 @@ export default {
     }
   },
   components: {
-    'users-ctx': UsersContextBar
+    'users-ctx': UsersContextBar,
+    'myitems-ctx': MyItemsContextBar
   },
   methods: {
     handleMenuItemsAdd(items) {
@@ -61,7 +66,7 @@ export default {
                 }
               }
             }
-
+            
             routes.push(item.route)
           }
         }
@@ -130,6 +135,15 @@ export default {
         }
       },
       {
+        title: 'Test',
+        icon: 'explore',
+        anonymousAccess: false,
+        route: {
+          path: '/myitems',
+          component: MyItemsView
+        }
+      },
+      {
         title: 'Services',
         icon: 'view_module',
         anonymousAccess: false,
@@ -143,6 +157,16 @@ export default {
         icon: 'lock_open',
         anonymousAccess: false,
         event: 'app:signout'
+      },
+      {
+        /* List route, no menu */
+        title: 'List view',
+        hidden: true, /* do not show it in the menu */
+        anonymousAccess: false,
+        route: {
+          path: '/list',
+          component: ListView
+        }
       }
     ])
 

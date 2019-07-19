@@ -142,7 +142,10 @@ module.exports = {
       'Envíe el (los) archivo (s) aquí o haga clic para navegar' ],
     'Date format': [ 'Format date', 'Formato de fetcha' ],
     'Time format': [ 'Format heure', 'Formato de hore' ],
-    'Date and time format': [ 'Format date et heure', 'Formato de fetcha y hora' ]
+    'Date and time format': [ 'Format date et heure', 'Formato de fetcha y hora' ],
+    'Test': [ 'Test', 'Prueba' ],
+    'Add item': [ 'Ajouter un item', 'Añadir un itemo' ],
+    'Load schema': [ 'Charger un schéma', 'Cargar un schema' ]
   },
   _unified: true
 }

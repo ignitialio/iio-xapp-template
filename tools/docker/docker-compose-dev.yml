@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   dlake-iioat:
-    image: registry.ignitial.io/ignitial/dlake:3.0.0
+    image: ignitial/dlake
     container_name: dlake-iioat
     ports:
       - "20989-20999:20989-20999"
@@ -19,7 +19,7 @@ services:
       infra:
 
   auth-iioat:
-    image: registry.ignitial.io/ignitial/auth:1.0.0
+    image: ignitial/auth
     container_name: auth-iioat
     volumes:
       - /home/vandrito/Documents/Projects/iio/services/auth/server:/opt/auth/server

@@ -9,8 +9,8 @@ export APP_VERSION=$(cat package.json \
 
 echo "app version: ${APP_VERSION}"
 
-docker-compose -f docker-compose-dev.yml stop
-docker-compose -f docker-compose-dev.yml rm -f
+docker-compose -f ${PWD}/tools/docker/docker-compose-dev.yml stop
+docker-compose -f ${PWD}/tools/docker/docker-compose-dev.yml rm -f
 
 if command -v iio 2>/dev/null; then
   iio infra dev --rm

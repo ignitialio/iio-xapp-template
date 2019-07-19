@@ -9,7 +9,7 @@ export APP_VERSION=$(cat package.json \
 
 echo "app version: ${APP_VERSION}"
 
-docker-compose stop
+docker-compose -f ${PWD}/tools/docker/docker-compose.yml stop
 docker-compose rm -f
 
 if command -v iio 2>/dev/null; then

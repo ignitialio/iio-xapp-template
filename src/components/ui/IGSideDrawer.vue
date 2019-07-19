@@ -28,7 +28,7 @@
       </div>
 
       <ig-list>
-        <ig-menuitem
+        <ig-menuitem v-if="!item.hidden"
           v-for="(item, index) in menuItems" :key="index"
           :item="item" @select="handleSelect"></ig-menuitem>
       </ig-list>
