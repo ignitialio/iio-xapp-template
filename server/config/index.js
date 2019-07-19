@@ -27,15 +27,17 @@ module.exports = {
     /* additional collections */
     collections: [{
       name: 'schemas',
-      indexes: [
-        {
-          key: 'name',
-          type: -1,
-          options: {
-            unique: true
+      options: {
+        indexes: [
+          {
+            key: 'name',
+            type: -1,
+            options: {
+              unique: true
+            }
           }
-        }
-      ]
+        ]
+      }
     }, {
       name: 'notifications'
     }, {

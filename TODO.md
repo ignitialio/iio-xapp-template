@@ -1,4 +1,3 @@
-- dlake: create index from options
 - manage notifications
 - cache roles -> clean cache
 - manage rpc timeout client side
@@ -6,4 +5,5 @@
 - manage multiple changes for selected users
 - hide items in igform
 - manage arrays in igform
-- i18n _language getter
+- i18n _language _getter_
+- list view search, add for admin, load from file for admin

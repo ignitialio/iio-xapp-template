@@ -23,7 +23,6 @@ services:
     container_name: auth-iioat
     volumes:
       - /home/vandrito/Documents/Projects/iio/services/auth/server:/opt/auth/server
-      - /home/vandrito/Documents/Projects/iio/services/auth/node_modules:/opt/auth/node_modules
     ports:
       - "20199:20199"
     environment:
