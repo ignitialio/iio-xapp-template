@@ -6,13 +6,14 @@
     }">
 
     <label v-if="label"
-      class="input-label tw-top-0 tw-left-0 tw-text-xs tw-select-none"
+      class="dtp-label tw-top-0 tw-left-0 tw-text-xs tw-select-none"
       :class="{
         'tw-text-gray-400': disabled,
         'tw-text-yellow-600': !disabled
       }">{{ label }}</label>
 
-    <flat-pickr class="tw-outline-none tw-bg-transparent"
+    <flat-pickr
+      class="dtp-input tw-outline-none tw-bg-transparent tw-text-gray-700"
       :class="{
         'tw-border-yellow-300': !disabled,
         'tw-border-gray-300': disabled,
@@ -53,8 +54,11 @@ export default {
     }
   },
   watch: {
-    date: function(val) {
-      this.$emit('input', val)
+    date: function(val, old) {
+      if (this.startDateWatching) {
+        this.$emit('input', val)
+        console.log('date change', old, val)
+      }
     }
   },
   data() {
@@ -74,6 +78,9 @@ export default {
   },
   mounted() {
     this.date = _.cloneDeep(this.value)
+    setTimeout(() => {
+      this.startDateWatching = true
+    })
 
     switch (this.type) {
       case 'date':
@@ -94,8 +101,10 @@ export default {
         break
     }
 
-    d3.select(this.$el).select('.dtp-input').selectAll('input')
+    d3.select(this.$el).selectAll('input')
       .classed('dtp-input', true)
+      .classed('dtp-input:hover', true)
+      .style('border-bottom', '1px solid #faf089')
   }
 }
 </script>
@@ -103,12 +112,21 @@ export default {
 <style scoped>
 .dtp-layout {
   background-color: transparent;
-  width: calc(100% - 0px);
-  height: 2em;
+  width: calc(100% - 1em);
+  height: 3em;
+}
+
+.dtp-layout:hover {
+  background-color: #f7fafc;
 }
 
 .dtp-input {
+  color: #4a5568;
+  border: 1px solid #faf089!important;
+}
 
+.dtp-input:hover {
+  border: 1px solid #d69e2e;
 }
 
 @media screen and (max-width: 800px) {
