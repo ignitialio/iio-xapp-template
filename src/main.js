@@ -79,7 +79,7 @@ Vue.prototype.$utils
     } catch (err) {
       console.log(err)
       app.$ws.resetLocalCredentials()
-      setTimeout(() => app.$router.push('/login'))
+      setTimeout(() => app.$router.push('/login'), 100)
     }
   })
 

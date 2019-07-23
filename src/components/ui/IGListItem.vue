@@ -22,6 +22,8 @@
         class="ig-ellipsis tw-w-full tw-text-xs tw-h-4 tw-overflow-hidden">
         {{ $t(subtitle) }}</div>
     </div>
+
+    <ig-iconbutton type="clear" color="red" @click.stop.prevent="handleDelete"/>
   </div>
 </template>
 
@@ -47,6 +49,9 @@ export default {
     handleClick() {
       this.$emit('select', this.item)
       this.$emit('update:selected', !this.selected)
+    },
+    handleDelete() {
+      this.$emit('delete', this.item)
     }
   }
 }

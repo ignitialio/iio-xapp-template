@@ -8,7 +8,7 @@ module.exports = {
   server: {
     port: IIO_SERVER_PORT,
     path: process.env.IIOS_SERVER_PATH || './dist',
-    filesDropPath: './dist/dropped',
+    filesDropPath: process.env.DROP_FILES_PATH || './dropped',
     corsEnabled: false
   },
   rest: {
@@ -33,6 +33,7 @@ module.exports = {
             key: 'name',
             type: -1,
             options: {
+              name: 'name_desc',
               unique: true
             }
           }

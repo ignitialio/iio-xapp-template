@@ -15,9 +15,13 @@
       <ig-icon src="assets/ignitialio-32.png"></ig-icon>
     </ig-toolbar>
 
+    <ig-progressbar v-if="showProgressBar" class="tw-fixed" v-model="progress"/>
+
     <ig-sidedrawer v-model="showMenu"
       :user="$store.state.user"
       :menuItems="$store.state.menuItems"></ig-sidedrawer>
+
+    <ig-notification class="tw-absolute" v-model="notification"/>
   </div>
 </template>
 
@@ -29,17 +33,22 @@ import ListView from '../views/ListView.vue'
 import MyItemsView from '../views/MyItemsView.vue'
 
 import UsersContextBar from '../views/context/UsersContextBar.vue'
+import ListContextBar from '../views/context/ListContextBar.vue'
 import MyItemsContextBar from '../views/context/MyItemsContextBar.vue'
 
 export default {
   data: () => {
     return {
       showMenu: false,
-      contextComponent: null
+      showProgressBar: false,
+      notification: null,
+      contextComponent: null,
+      progress: 50
     }
   },
   components: {
     'users-ctx': UsersContextBar,
+    'list-ctx': ListContextBar,
     'myitems-ctx': MyItemsContextBar
   },
   methods: {
@@ -66,7 +75,7 @@ export default {
                 }
               }
             }
-            
+
             routes.push(item.route)
           }
         }
@@ -204,6 +213,22 @@ export default {
     this.$services.on('app:context:bar', ctxComponent => {
       // use null to disable
       this.contextComponent = ctxComponent
+    })
+
+    // application notifications
+    this.$services.on('app:notification', message => {
+      this.notification = message
+    })
+
+    // progress bar events
+    this.$services.on('app:progress:show', show => {
+      this.showProgressBar = show
+      this.$forceUpdate()
+      console.log('SHOW', show)
+    })
+
+    this.$services.on('app:progress', val => {
+      this.progress = val
     })
   },
   computed: {

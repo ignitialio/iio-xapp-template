@@ -145,7 +145,10 @@ module.exports = {
     'Date and time format': [ 'Format date et heure', 'Formato de fetcha y hora' ],
     'Test': [ 'Test', 'Prueba' ],
     'Add item': [ 'Ajouter un item', 'Añadir un itemo' ],
-    'Load schema': [ 'Charger un schéma', 'Cargar un schema' ]
+    'Load schema': [ 'Charger un schéma', 'Cargar un schema' ],
+    'Load item': [ 'Charger un item', 'Cargar un item' ],
+    '`File ${ params[0] } uploaded`': [ '`Fichier ${ params[0] } chargé`',
+      '`Archivo ${ params[0] } cargado`' ]
   },
   _unified: true
 }

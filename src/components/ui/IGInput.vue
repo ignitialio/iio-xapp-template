@@ -24,7 +24,7 @@
           'tw-text-gray-300': disabled,
           'input-pwd': type === 'password'
         }"
-        :value="value" @input="handleInput"
+        :value="value" @input="handleInput" @change="handleChange" @keyup="handleChange"
         :type="type"/>
 
       <input v-if="type === 'password' && showPassword"
@@ -49,6 +49,12 @@
         <i v-if="!showPassword" class="material-icons tw-text-base tw-w-6"
           @click="showPassword = !showPassword">visibility</i>
       </div>
+
+      <div v-if="icon"
+        class="tw-flex tw-justify-center tw-items-center tw-cursor-pointer
+          tw-text-gray-500">
+        <i class="material-icons tw-text-base tw-w-6">{{ icon }}</i>
+      </div>
     </div>
   </div>
 </template>
@@ -63,6 +69,9 @@ export default {
       default: 'text'
     },
     label: {
+      type: String
+    },
+    icon: {
       type: String
     },
     readonly: {
@@ -80,6 +89,9 @@ export default {
   methods: {
     handleInput(event) {
       this.$emit('input', event.target.value)
+    },
+    handleChange(event) {
+      this.$emit('change', event.target.value)
     }
   },
   mounted() {

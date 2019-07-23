@@ -1,5 +1,5 @@
 {
-  "name":"users",
+  "name":"myitems",
   "schema":{
     "title":"user",
     "type":"object",

@@ -21,8 +21,10 @@ export APP_VERSION=$(cat package.json \
 
 echo "app version: ${APP_VERSION}"
 
+export IIOS_REST_LOGLEVEL=error
 export IIOS_NAMESPACE=ignitialio
 export MONGODB_DBNAME=ignitialio
+export DROP_FILES_PATH="public/dropped"
 
 docker-compose -f ${PWD}/tools/docker/docker-compose-dev.yml up -d
 

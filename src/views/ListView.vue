@@ -3,6 +3,7 @@
     <ig-list class="tw-w-1/4 tw-m-1 tw-shadow t-h-full">
       <ig-listitem v-for="(item, index) in items" :key="index"
         :item="item" @select="handleSelect"
+        @delete="handleDelete"
         :title="'' + (item.name || item.title || item.description)"
         :subtitle="item._id + ''">
       </ig-listitem>
@@ -31,23 +32,70 @@ export default {
       this.jsonHTML = jsonPretty(item)
       d3.select(this.$el).select('.list-json-viewer').html(this.jsonHTML)
       console.log($j(this.jsonHTML))
+    },
+    handleFileLoaded(data) {
+      try {
+        data = JSON.parse(data)
+        this.$db.collection(this.collection).then(items => {
+          items.dPut(data).then(result => {
+            console.log('item loaded', result)
+            this.update()
+          }).catch(err => console.log(err))
+        }).catch(err => console.log(err))
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    handleDelete(item) {
+      if (item._id) {
+        this.$db.collection(this.collection).then(items => {
+          items.dDelete(item).then(result => {
+            console.log('deleted', item._id)
+            this.update()
+          }).catch(err => console.log(err))
+        }).catch(err => console.log(err))
+      }
+    },
+    handleSearch(data) {
+      this.update(data)
+    },
+    update(filter) {
+      if (this.collection) {
+        this.$db.collection(this.collection).then(items => {
+          items.dFind({}).then(result => {
+            this.items = result
+
+            if (filter) {
+              this.items = _.filter(this.items, e => {
+                return !!JSON.stringify(e).match(filter)
+              })
+            }
+          }).catch(err => console.log(err))
+        }).catch(err => console.log(err))
+      }
     }
   },
   mounted() {
+    this._listeners = {
+      onFileLoaded: this.handleFileLoaded.bind(this),
+      onSearch: this.handleSearch.bind(this)
+    }
+
     console.log(this.$router.currentRoute)
     this.collection = this.$router.currentRoute.query.collection
     console.log('LIST', this.collection)
+    this.update()
 
-    if (this.collection) {
-      this.$db.collection(this.collection).then(items => {
-        items.dFind({}).then(result => {
-          console.log('items', result.length)
-          this.items = result
-        }).catch(err => console.log(err))
-      }).catch(err => console.log(err))
-    }
+    this.$services.emit('app:context:bar', 'list-ctx')
+
+    this.$services.on('view:list:loaded', this._listeners.onFileLoaded)
+    this.$services.on('view:list:search', this._listeners.onSearch)
   },
   beforeDestroy() {
+    this.$services.emit('app:context:bar', null)
+
+    this.$services.off('view:list:loaded', this._listeners.onFileLoaded)
+    this.$services.off('view:list:search', this._listeners.onSearch)
   }
 }
 </script>

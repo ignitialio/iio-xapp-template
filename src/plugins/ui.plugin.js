@@ -21,6 +21,7 @@ import IGHBox from '../components/ui/IGHBox.vue'
 import IGVBox from '../components/ui/IGVBox.vue'
 import IGGeo from '../components/ui/IGGeo.vue'
 import IGDatetimePicker from '../components/ui/IGDatetimePicker.vue'
+import IGNotification from '../components/ui/IGNotification.vue'
 
 import IGFormSettings from '../components/ui/utils/IGFormSettings.vue'
 
@@ -50,6 +51,7 @@ export default {
       Vue.component('ig-vbox', IGVBox)
       Vue.component('ig-geo', IGGeo)
       Vue.component('ig-datetime-picker', IGDatetimePicker)
+      Vue.component('ig-notification', IGNotification)
 
       Vue.component('ig-form-settings', IGFormSettings)
     }

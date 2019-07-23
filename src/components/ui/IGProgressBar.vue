@@ -35,7 +35,6 @@ export default {
   methods: {
     update() {
       let width = 100 * this.value / (this.max - this.min)
-      console.log(this.value, this.max, this.min, width)
       this.progressEl.style('width', width + '%')
     }
   },
