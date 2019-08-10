@@ -148,7 +148,8 @@ module.exports = {
     'Load schema': [ 'Charger un schéma', 'Cargar un schema' ],
     'Load item': [ 'Charger un item', 'Cargar un item' ],
     '`File ${ params[0] } uploaded`': [ '`Fichier ${ params[0] } chargé`',
-      '`Archivo ${ params[0] } cargado`' ]
+      '`Archivo ${ params[0] } cargado`' ],
+    'Save item': [ 'Sauvegarder l\'item', 'Guardar el artículo']
   },
   _unified: true
 }

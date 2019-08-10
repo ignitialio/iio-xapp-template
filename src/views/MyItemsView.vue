@@ -58,7 +58,7 @@ export default {
     selected: {
       handler: function(val) {
         if (!this.schema) {
-          this.schema = this.$utils.generateJSONSchema('user', val)
+          this.schema = this.$utils.generateJSONSchema('myitem', val)
           this.schemaModified = true
         }
 
@@ -142,6 +142,7 @@ export default {
             this.schema = myitemsSchema.schema
             this.lastSchemaChksum = $j(this.schema)
             setTimeout(() => this.schemaModified = false, 50)
+            console.log($j(this.schema))
           } else {
             console.log('no myitems schema saved')
           }
@@ -164,14 +165,20 @@ export default {
       }).catch(err => console.log(err))
     },
     handleAddItem() {
-      this.$db.collection('myitems').then(async myitems => {
-        try {
-          await myitems.dUpdate({ _id: this.selected._id }, this.selected)
-          this.userModified = true
-        } catch (err) {
-          console.log(err)
+      if (!this.schema) {
+        this.$services.emit('app:notification', this.$t('You must define a schema first'))
+        return
+      }
+
+      let item = this.$utils.generateDataFormJSONSchema(this.schema)
+
+      this.$router.push({ path: '/item',
+        query: {
+          data: JSON.stringify(item),
+          collection: 'myitems',
+          schema: JSON.stringify(this.schema)
         }
-      }).catch(err => console.log(err))
+      })
     },
     handleLoadSchema() {
       this.$router.push({ path: '/list', query: { collection: 'schemas' }})

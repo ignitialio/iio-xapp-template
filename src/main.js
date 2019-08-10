@@ -77,7 +77,7 @@ Vue.prototype.$utils
         app.$router.push('/login')
       }
     } catch (err) {
-      console.log(err)
+      console.log('failed to authenticate', err)
       app.$ws.resetLocalCredentials()
       setTimeout(() => app.$router.push('/login'), 100)
     }

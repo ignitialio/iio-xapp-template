@@ -8,3 +8,4 @@
 - i18n _language _getter_
 - list view search, add for admin, load from file for admin
 - lastModify to collections
+- automated translations from db

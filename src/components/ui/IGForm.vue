@@ -1,5 +1,5 @@
 <template>
-  <div class="form tw-flex tw-flex-col tw-m-1">
+  <div v-if="schema._meta" class="form tw-flex tw-flex-col tw-m-1">
     <div v-if="isObjectId(value) || isPrimitive(value) || value === null"
       class="tw-flex tw-items-end tw-w-full">
 
@@ -236,7 +236,7 @@ export default {
       this.$emit('update:schema', this._schema)
     }
   },
-  beforeMount() {
+  async beforeMount() {
     this._schema = _.cloneDeep(this.schema)
     this._schema._meta = this._schema._meta || { type: null }
     this.$emit('update:schema', this._schema)

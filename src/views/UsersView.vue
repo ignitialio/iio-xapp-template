@@ -157,7 +157,7 @@ export default {
       this.$db.collection('users').then(async users => {
         try {
           await users.dUpdate({ _id: this.selected._id }, this.selected)
-          this.userModified = true
+          this.userModified = false
         } catch (err) {
           console.log(err)
         }
