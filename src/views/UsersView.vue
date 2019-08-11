@@ -24,7 +24,7 @@
 
       <ig-vbox class="actions-bar tw-w-10 tw-justify-end tw-shadow" verticalFill
         :class="{ 'open': userModified || schemaModified}">
-        <ig-iconbutton v-if="schemaModified"
+        <ig-iconbutton v-if="editMode && schemaModified"
           type="save_alt" size="small"
           @click="handleSaveSchema"></ig-iconbutton>
 

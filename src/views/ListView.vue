@@ -31,7 +31,10 @@ export default {
       this.selected = item
       this.jsonHTML = jsonPretty(item)
       d3.select(this.$el).select('.list-json-viewer').html(this.jsonHTML)
-      console.log($j(this.jsonHTML))
+
+      if (this.backOnSelect) {
+        this.$router.push({ path: this.backOnSelect, query: { data: this.selected }})
+      }
     },
     handleFileLoaded(data) {
       try {
@@ -84,6 +87,9 @@ export default {
     console.log(this.$router.currentRoute)
     this.collection = this.$router.currentRoute.query.collection
     console.log('LIST', this.collection)
+
+    this.backOnSelect = this.$router.currentRoute.query.backOnSelect
+
     this.update()
 
     this.$services.emit('app:context:bar', 'list-ctx')

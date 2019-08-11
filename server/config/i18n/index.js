@@ -67,6 +67,7 @@ module.exports = {
     'Geographical location': [ 'Localisation géographique', 'Ubicación geográfica' ],
     'Geographical shape': [ 'Forme géographique', 'Forma geográfica' ],
     'Modification done': [ 'Modification réalisée', 'Cambio realizado' ],
+    'Modification failed': [ 'Modification échouée', 'Cambio fallido' ],
     'Do you want to update': [ 'Voulez-vous mettre à jour', '¿Desea actualizar?' ],
     'January': [ 'Janvier', 'Enero' ],
     'February': [ 'Février', 'Febrero' ],
@@ -149,7 +150,11 @@ module.exports = {
     'Load item': [ 'Charger un item', 'Cargar un item' ],
     '`File ${ params[0] } uploaded`': [ '`Fichier ${ params[0] } chargé`',
       '`Archivo ${ params[0] } cargado`' ],
-    'Save item': [ 'Sauvegarder l\'item', 'Guardar el artículo']
+    'Save item': [ 'Sauvegarder l\'item', 'Guardar el artículo'],
+    'You must define a schema first': [ 'Vous devez définir un schéma',
+      'Debe definir un esquema' ],
+    'No related schema': [ 'Pas de schéma correspondant',
+      'Sin esquema de correspondencia' ]
   },
   _unified: true
 }

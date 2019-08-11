@@ -1,8 +1,8 @@
 <template>
-  <div class="item-layout tw-flex tw-w-full">
-    <ig-form v-if="schema"
+  <div class="item-layout tw-w-full tw-overflow-y-auto">
+    <ig-form v-if="schema" class="item-form tw-w-2/3"
       v-model="item" :schema.sync="schema"
-      :editable="editMode">
+      :editable="$store.state.user.role === 'admin' && editMode">
     </ig-form>
   </div>
 </template>
@@ -23,6 +23,7 @@ export default {
     item: {
       handler: function(val) {
         this.itemModified = true
+        this.$services.emit('view:item:modified', true)
       },
       deep: true
     }
@@ -46,35 +47,39 @@ export default {
           if (this.item._id) {
             await items.dUpdate({ _id: this.item._id }, this.item)
           } else {
-            this.item = await items.dPut(this.item)
+            let result = await items.dPut(this.item)
+            console.log(result)
           }
 
           this.itemModified = false
+          this.$services.emit('view:item:modified', false)
+          this.$services.emit('app:notification', this.$t('Modification done'))
         } catch (err) {
-          console.log(err)
+          this.$services.emit('app:notification', this.$t('Modification failed'))
         }
       }).catch(err => console.log(err))
     }
   },
   mounted() {
     this._listeners = {
-      onEditMode: this.handleEditMode.bind(this)
+      onEditMode: this.handleEditMode.bind(this),
+      onItemSave: this.handleSaveItem.bind(this)
     }
 
-    console.log(this.$router.currentRoute)
     this.collection = this.$router.currentRoute.query.collection
     this.item = JSON.parse(this.$router.currentRoute.query.data)
     this.schema = JSON.parse(this.$router.currentRoute.query.schema)
-    console.log('ITEM', $j(this.schema), this.collection)
 
     this.$services.emit('app:context:bar', 'item-ctx')
 
-    this.$services.on('view:users:edit', this._listeners.onEditMode)
+    this.$services.on('view:item:edit', this._listeners.onEditMode)
+    this.$services.on('view:item:save', this._listeners.onItemSave)
   },
   beforeDestroy() {
     this.$services.emit('app:context:bar', null)
 
-    this.$services.off('view:users:edit', this._listeners.onEditMode)
+    this.$services.off('view:item:edit', this._listeners.onEditMode)
+    this.$services.off('view:item:save', this._listeners.onItemSave)
   }
 }
 </script>
@@ -84,48 +89,7 @@ export default {
   height: calc(100% - 0px);
 }
 
-.item-json-viewer {
-  height: calc(100% - 0px);
-
-  font-family: Menlo, Monaco, "Courier New", monospace;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 16px;
-  letter-spacing: 0;
-  text-align: left;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin: 0;
+.item-form {
+  margin: 16px 15%;
 }
-
-.item-json-viewer .json-key {
-  color: dodgerblue;
-  font-weight: bold;
-}
-
-.item-json-viewer .json-pretty {
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-.item-json-viewer .json-selected {
-  background-color: rgba(139, 191, 228, 0.19999999999999996);
-}
-
-.item-json-viewer .json-string {
-  color: #6caedd;
-}
-
-.item-json-viewer .json-key {
-  color: #ec5f67;
-}
-
-.item-json-viewer .json-boolean {
-    color: #99c794;
-}
-
-.item-json-viewer .json-number {
-    color: #99c794;
-}
-
 </style>

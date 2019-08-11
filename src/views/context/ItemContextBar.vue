@@ -9,7 +9,7 @@
 
     <div style="width: 3em"></div>
 
-    <ig-iconbutton size="small" type="save"
+    <ig-iconbutton v-if="modified" size="small" type="save"
       :title="$t('Save item')" @click="handleItemSave"></ig-iconbutton>
   </div>
 </template>
@@ -19,7 +19,8 @@ export default {
   name: 'ig-itemctx',
   data: () => {
     return {
-      editMode: false
+      editMode: false,
+      modified: false
     }
   },
   watch: {
@@ -31,13 +32,22 @@ export default {
     handleItemSave() {
       this.$services.emit('view:item:save')
     },
+    handleItemModified(status) {
+      this.modified = status
+    },
     handleSchemaLoad() {
       this.$services.emit('view:schema:load')
     }
   },
   mounted() {
+    this._listeners = {
+      onItemModified: this.handleItemModified.bind(this)
+    }
+
+    this.$services.on('view:item:modified', this._listeners.onItemModified)
   },
-  computed: {
+  beforeDestroy() {
+    this.$services.off('view:item:modified', this._listeners.onItemModified)
   }
 }
 </script>

@@ -1,152 +1,135 @@
 {
-  "name":"myitems",
+  "name": "myitems",
   "schema":{
-    "title":"user",
-    "type":"object",
-    "properties":{
-      "_id":{
-        "type":"objectid"
+    "description": "myitem",
+    "type": "object",
+    "properties": {
+      "_id": {
+        "description": "Unique ID",
+        "type":"objectid",
+        "readOnly": true
       },
-      "gender":{
-        "type":"string"
-      },
-      "name":{
+      "name": {
+        "description": "Name",
         "type":"object",
-        "properties":{
-          "title":{
+        "properties": {
+          "title": {
+            "description": "Title",
             "type":"string"
           },
-          "first":{
+          "first": {
+            "description": "First name",
             "type":"string"
           },
-          "last":{
+          "last": {
+            "description": "Last name",
             "type":"string"
           }
         }
       },
-      "location":{
+      "location": {
         "type":"object",
-        "properties":{
-          "street":{
+        "description": "Location",
+        "_meta": {
+          "i18n": {
+            "en": "Location",
+            "fr": "Localisation",
+            "es": "Ubicación"
+          }
+        },
+        "properties": {
+          "street": {
+            "description": "Street",
             "type":"string"
           },
-          "city":{
+          "city": {
+            "description": "City",
             "type":"string"
           },
-          "state":{
+          "state": {
+            "description": "State",
             "type":"string"
           },
-          "postcode":{
-            "type":"number"
+          "postcode": {
+            "description": "Post code",
+            "type":"string"
           },
-          "coordinates":{
+          "coordinates": {
             "type":"object",
-            "properties":{
-              "latitude":{
-                "type":"string"
+            "properties": {
+              "latitude": {
+                "description": "Latitude",
+                "type": "number",
+                "default": 0
               },
-              "longitude":{
-                "type":"string"
+              "longitude": {
+                "description": "Longitude",
+                "type": "number",
+                "default": 0
+              }
+            },
+            "_meta": {
+              "type": "geopoint"
+            }
+          },
+          "someData": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "item"
+            },
+            "description": "Some data"
+          },
+          "someComplexData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "latitude": {
+                  "type": "number",
+                  "description": "Latitude"
+                },
+                "longitude": {
+                  "type": "number",
+                  "description": "Longitude"
+                }
+              },
+              "description": "Some complex item"
+            },
+            "description": "Some complex data"
+          }
+        }
+      },
+      "otherData":{
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "description": "Latitude"
+              },
+              "longitude": {
+                "type": "number",
+                "description": "Longitude"
               }
             }
           },
-          "timezone":{
-            "type":"object",
-            "properties":{
-              "offset":{
-                "type":"string"
+          {
+            "type": "object",
+            "properties": {
+              "toto": {
+                "type": "string",
+                "description": "Toto"
               },
-              "description":{
-                "type":"string"
+              "titi": {
+                "type": "string",
+                "description": "Titi"
               }
             }
           }
-        }
-      },
-      "email":{
-        "type":"string"
-      },
-      "login":{
-        "type":"object",
-        "properties":{
-          "uuid":{
-            "type":"string"
-          },
-          "username":{
-            "type":"string"
-          },
-          "password":{
-            "type":"string"
-          },
-          "salt":{
-            "type":"string"
-          },
-          "md5":{
-            "type":"string"
-          },
-          "sha1":{
-            "type":"string"
-          },
-          "sha256":{
-            "type":"string"
-          }
-        }
-      },
-      "dob":{
-        "type":"object",
-        "properties":{
-          "date":{
-            "type":"string"
-          },
-          "age":{
-            "type":"number"
-          }
-        }
-      },
-      "registered":{
-        "type":"object",
-        "properties":{
-          "date":{
-            "type":"string"
-          },
-          "age":{
-            "type":"number"
-          }
-        }
-      },
-      "phone":{
-        "type":"string"
-      },
-      "cell":{
-        "type":"string"
-      },
-      "id":{
-        "type":"object",
-        "properties":{
-          "name":{
-            "type":"string"
-          },
-          "value":{
-            "type":"null"
-          }
-        }
-      },
-      "picture":{
-        "type":"object",
-        "properties":{
-          "large":{
-            "type":"string"
-          },
-          "medium":{
-            "type":"string"
-          },
-          "thumbnail":{
-            "type":"string"
-          }
-        }
-      },
-      "nat":{
-        "type":"string"
+        ]
       }
     },
     "_schema":"http://json-schema.org/draft-07/schema#"

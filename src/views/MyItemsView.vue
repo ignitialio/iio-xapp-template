@@ -4,11 +4,10 @@
       <ig-progressbar v-if="loading"
         indeterminate class="tw-absolute"></ig-progressbar>
       <ig-list class="list">
-        <ig-listitem v-for="(user, index) in myitems" :key="index"
-          :item="user" @select="handleSelect" :selected="selected === user"
-          :title="user.name.first + ' ' + user.name.last"
-          :subtitle="user.email"
-          :picture="user.picture.medium"
+        <ig-listitem v-for="(item, index) in myitems" :key="index"
+          :item="item" @select="handleSelect" :selected="selected === item"
+          :title="item.name.first + ' ' + item.name.last"
+          :subtitle="item.location.postcode + ' ' + item.location.city"
           avatar></ig-listitem>
       </ig-list>
     </div>
@@ -23,12 +22,12 @@
       </div>
 
       <ig-vbox class="actions-bar tw-w-10 tw-justify-end tw-shadow" verticalFill
-        :class="{ 'open': userModified || schemaModified}">
-        <ig-iconbutton v-if="schemaModified"
+        :class="{ 'open': itemModified || editMode && schemaModified}">
+        <ig-iconbutton v-if="editMode && schemaModified"
           type="save_alt" size="small"
           @click="handleSaveSchema"></ig-iconbutton>
 
-        <ig-iconbutton v-if="userModified"
+        <ig-iconbutton v-if="itemModified"
           type="save_alt" size="small"
           @click="handleSaveItem"></ig-iconbutton>
       </ig-vbox>
@@ -50,7 +49,7 @@ export default {
       loading: false,
       schema: null,
       schemaModified: false,
-      userModified: false,
+      itemModified: false,
       editMode: false
     }
   },
@@ -64,7 +63,7 @@ export default {
 
         if ($j(val) !== this.lastItemChksum) {
           this.lastItemChksum = $j(val)
-          this.userModified = true
+          this.itemModified = true
         }
       },
       deep: true
@@ -96,7 +95,7 @@ export default {
     },
     async handleSelect(item) {
       this.lastItemChksum = $j(item)
-      this.userModified = false
+      this.itemModified = false
       this.selected = item
     },
     handleSaveSchema() {
@@ -142,10 +141,24 @@ export default {
             this.schema = myitemsSchema.schema
             this.lastSchemaChksum = $j(this.schema)
             setTimeout(() => this.schemaModified = false, 50)
-            console.log($j(this.schema))
           } else {
+            this.$services.emit('app:notification', this.$t('No related schema'))
             console.log('no myitems schema saved')
           }
+        } catch (err) {
+          console.log(err)
+        }
+      }).catch(err => console.log(err))
+    },
+    saveSchema(schema) {
+      this.$db.collection('schemas').then(async schemas => {
+        try {
+          schema = _.cloneDeep(schema)
+          schema._schema = schema.$schema
+          delete schema.$schema
+          delete schema._id
+          await schemas.dUpdate({ name: schema.name }, schema)
+          console.log('schema ' + schema.name + ' updated')
         } catch (err) {
           console.log(err)
         }
@@ -158,7 +171,7 @@ export default {
       this.$db.collection('myitems').then(async myitems => {
         try {
           await myitems.dUpdate({ _id: this.selected._id }, this.selected)
-          this.userModified = true
+          this.itemModified = true
         } catch (err) {
           console.log(err)
         }
@@ -170,9 +183,14 @@ export default {
         return
       }
 
-      let item = this.$utils.generateDataFormJSONSchema(this.schema)
+      let gen = this.$utils.generateDataFormJSONSchema(this.schema)
+      let item = gen.json
+      // update schema for missongs like required and _meta
+      this.schema = gen.schema
+      this.saveSchema(this.schema)
 
-      this.$router.push({ path: '/item',
+      this.$router.push({
+        path: '/item',
         query: {
           data: JSON.stringify(item),
           collection: 'myitems',
@@ -181,7 +199,13 @@ export default {
       })
     },
     handleLoadSchema() {
-      this.$router.push({ path: '/list', query: { collection: 'schemas' }})
+      this.$router.push({
+        path: '/list',
+        query: {
+          collection: 'schemas',
+          backOnSelect: '/myitems'
+        }
+      })
     }
   },
   mounted() {

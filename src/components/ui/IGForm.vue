@@ -7,7 +7,6 @@
           'tw-w-1/2': editable,
           'tw-w-3/4': !editable
         }">
-
         <ig-select v-if="schema.enum" :label="$t(name)"
           :disabled="editable"
           :values="schema.enum" :value="value" @input="handleInput"
@@ -48,7 +47,7 @@
     </div>
 
     <div v-if="value && !isPrimitive(value) && schema.properties &&
-      schema._meta.type !== 'geopoint'"
+      schema.type !== 'array' && schema._meta.type !== 'geopoint'"
       class="tw-flex tw-flex-col tw-w-full"
       v-for="(prop, index) in properties" :key="index">
 
@@ -56,7 +55,7 @@
         class="tw-flex tw-items-center">
         <div class="tw-mt-4 tw-mb-4 tw-font-bold"
           :class="{ 'tw-text-gray-400': editable }">
-          {{ $t(prop) }}</div>
+          {{ translation(prop, schema.properties[prop]) }}</div>
 
         <div v-if="hasSettings && editable"
           class="tw-mb-1 tw-flex tw-items-centered">
@@ -69,8 +68,39 @@
         :schema.sync="schema.properties[prop]"
         @update:schema="handleUpdateSchema(prop, $event)"
         class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
-        v-model="value[prop]" :editable="editable">{{ value[prop] }}</ig-form>
+        v-model="value[prop]" :editable="editable"></ig-form>
     </div>
+{{ value }}
+    <div v-if="value && schema.type === 'array'"
+      class="tw-flex tw-flex-col tw-w-full">
+      <ig-form v-if="!Array.isArray(schema.items) && schema.items.type !== 'object'"
+        v-for="(item, index) in value" :key="index"
+        :name="translation('item', schema.items)"
+        :schema.sync="schema.items"
+        @update:schema="handleUpdateSchema(null, $event)"
+        class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
+        :value="item" :editable="editable"></ig-form>
+
+      <ig-form v-if="schema.items.type === 'object'"
+        v-for="(item, index) in value" :key="index"
+        :name="translation('item', schema.items) + '[' + index + ']'"
+        :schema.sync="schema.items"
+        @update:schema="handleUpdateSchema($t('item'), $event)"
+        class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
+        :value="item" :editable="editable"></ig-form>
+
+      <ig-form v-if="itemSchema && Array.isArray(schema.items)"
+        v-for="(itemSchema, index) in schema.items" :key="index"
+        :name="translation('item', itemSchema)"
+        :schema.sync="itemSchema"
+        @update:schema="handleUpdateSchema($t('item'), $event)"
+        class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
+        :value="value[index]" :editable="editable"></ig-form>
+    </div>
+
+    <ig-iconbutton
+      v-if="schema.type === 'array' && !Array.isArray(schema.items)" type="add"
+      @click="handleAddItem"></ig-iconbutton>
 
     <div v-if="schema._meta.type === 'geopoint'"
       class="tw-flex tw-flex-col tw-w-full">
@@ -232,14 +262,48 @@ export default {
       }
     },
     handleUpdateSchema(prop, val) {
-      this._schema.properties[prop] = val
+      if (this.schema.type === 'object') {
+        this._schema.properties[prop] = val
+      } else if (this.schema.type === 'array') {
+        this._schema.items = val
+      }
+
       this.$emit('update:schema', this._schema)
+    },
+    handleAddItem() {
+      let data = this.$utils.generateDataFormJSONSchema(this.schema).json
+      console.log('adding', data[0])
+      let arr = this.value.concat([ data[0] ])
+
+      this.$emit('input', arr)
+    },
+    translation(prop, schema) {
+      if (!schema) {
+        console.log('!!! no schema for translation')
+        return
+      }
+
+      if (schema._meta && schema._meta.i18n) {
+        let lang = this.$i18n._language.slice(0, 2)
+        return schema._meta.i18n[lang]
+      } else if (schema.description) {
+        return this.$t(schema.description)
+      } else if (prop) {
+        return this.$t(prop)
+      }
+
+      return this.$t(name)
     }
   },
   async beforeMount() {
+    if (!this.schema) {
+      console.error('!!! no schema', this.name, $j(this.value))
+    }
+
     this._schema = _.cloneDeep(this.schema)
     this._schema._meta = this._schema._meta || { type: null }
     this.$emit('update:schema', this._schema)
+    // console.log(this.name, $j(this._schema))
   },
   mounted() {
     this.updateSettings()
