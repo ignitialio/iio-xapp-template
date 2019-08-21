@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: iioat-app
-        image: registry.ignitial.io/ignitial/iioat:APP_VERSION
+        image: registry.ignitial.io/ignitial/iioat:5.0.0
         ports:
         - containerPort: 8080
         env:
@@ -95,7 +95,7 @@ spec:
     spec:
       containers:
       - name: dlake-iioat
-        image: ignitial/dlake:DLAKE_VERSION
+        image: ignitial/dlake:3.0.3
         ports:
           - containerPort: 20194
             name: dt-service
@@ -157,7 +157,7 @@ spec:
     spec:
       containers:
       - name: auth-iioat
-        image: ignitial/auth:AUTH_VERSION
+        image: ignitial/auth:1.0.2
         ports:
         - containerPort: 20295
         env:

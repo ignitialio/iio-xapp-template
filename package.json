@@ -17,7 +17,7 @@
     "prod:stop": "tools/scripts/prod_clean.sh",
     "lint": "eslint --ext .js,.vue src",
     "docker:build": "docker build --rm -t ignitial/iioat:${npm_package_version} . && docker tag ignitial/iioat:${npm_package_version} registry.ignitial.io/ignitial/iioat:${npm_package_version}",
-    "docker:publish": "npm run build:image && docker push registry.ignitial.io/ignitial/iioat:${npm_package_version}",
+    "docker:publish": "npm run docker:build && docker push registry.ignitial.io/ignitial/iioat:${npm_package_version}",
     "cache:clean": "rimraf -rf ./node_modules/.cache/babel-loader/*"
   },
   "dependencies": {
