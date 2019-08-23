@@ -21,6 +21,9 @@ export APP_VERSION=$(cat package.json \
 
 echo "app version: ${APP_VERSION}"
 
+export AUTH_VERSION=1.0.2
+export DLAKE_VERSION=3.0.3
+
 export IIOS_REST_LOGLEVEL=error
 export IIOS_NAMESPACE=ignitialio
 export MONGODB_DBNAME=ignitialio

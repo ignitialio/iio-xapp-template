@@ -18,6 +18,7 @@ spec:
       containers:
       - name: iioat-app
         image: registry.ignitial.io/ignitial/iioat:5.0.0
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
         env:
@@ -81,7 +82,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dlake-iioat
+  name: dlake
   labels:
     app: dlake
 spec:
@@ -94,8 +95,9 @@ spec:
         app: dlake
     spec:
       containers:
-      - name: dlake-iioat
+      - name: dlake
         image: ignitial/dlake:3.0.3
+        imagePullPolicy: Never
         ports:
           - containerPort: 20194
             name: dt-service
@@ -143,7 +145,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-iioat
+  name: auth
   labels:
     app: auth
 spec:
@@ -156,15 +158,16 @@ spec:
         app: auth
     spec:
       containers:
-      - name: auth-iioat
+      - name: auth
         image: ignitial/auth:1.0.2
+        imagePullPolicy: Never
         ports:
         - containerPort: 20295
         env:
           - name: IIOS_NAMESPACE
             value: "iioat"
           - name: IIOS_SERVER_HOST
-            value: "dlake.default.svc.cluster.local"
+            value: "auth.default.svc.cluster.local"
           - name: IIOS_SERVER_PORT
             value: "20295"
           - name: REDIS_HOST
@@ -188,7 +191,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dlake-iioat
+  name: dlake
 spec:
   selector:
     app: dlake
@@ -215,7 +218,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-iioat
+  name: auth
 spec:
   selector:
     app: auth

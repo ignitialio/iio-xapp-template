@@ -23,7 +23,7 @@ services:
       infra:
 
   dlake-iioat:
-    image: ignitial/dlake:3.0.3
+    image: ignitial/dlake:${DLAKE_VERSION}
     container_name: dlake-iioat
     ports:
       - "20989-20992:20989-20992"
@@ -38,7 +38,7 @@ services:
       infra:
 
   auth-iioat:
-    image: ignitial/auth:1.0.2
+    image: ignitial/auth:${AUTH_VERSION}
     container_name: auth-iioat
     ports:
       - "20199:20199"

@@ -74,12 +74,18 @@ Vue.prototype.$utils
         console.log('authenticated')
       } else {
         app.$ws.resetLocalCredentials()
-        app.$router.push('/login')
+        if (app.$router.currentRoute.path !== '/login') {
+          app.$router.push('/login')
+        }
       }
     } catch (err) {
       console.log('failed to authenticate', err)
       app.$ws.resetLocalCredentials()
-      setTimeout(() => app.$router.push('/login'), 100)
+      setTimeout(() => {
+        if (app.$router.currentRoute.path !== '/login') {
+          app.$router.push('/login')
+        }
+      }, 100)
     }
   })
 

@@ -70,7 +70,7 @@
         class="tw-ml-4 tw-h-full tw-border tw-border-gray-100"
         v-model="value[prop]" :editable="editable"></ig-form>
     </div>
-{{ value }}
+
     <div v-if="value && schema.type === 'array'"
       class="tw-flex tw-flex-col tw-w-full">
       <ig-form v-if="!Array.isArray(schema.items) && schema.items.type !== 'object'"

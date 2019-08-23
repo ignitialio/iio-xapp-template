@@ -4,15 +4,15 @@
 sudo cp /etc/hosts /etc/hosts.beforekube
 
 # sets app versions
-APP_VERSION=$(cat ../package.json \
+export APP_VERSION=$(cat ../package.json \
   | grep version \
   | head -1 \
   | awk -F: '{ print $2 }' \
   | sed 's/[",]//g' \
   | tr -d '[[:space:]]')
 
-AUTH_VERSION=1.0.2
-DLAKE_VERSION=3.0.3
+export AUTH_VERSION=1.0.2
+export DLAKE_VERSION=3.0.3
 
 echo "get app version..."
 cat templates/minikube-app-deploy.template.yaml | sed "s/APP_VERSION/$APP_VERSION/g" | sed "s/DLAKE_VERSION/$DLAKE_VERSION/g" | sed "s/AUTH_VERSION/$AUTH_VERSION/g" > app/minikube-app-deploy.yaml

@@ -213,7 +213,9 @@ export default {
     // app sign out event
     this.$services.on('app:signout', () => {
       this.$ws.resetLocalCredentials()
-      this.$router.push('/login')
+      if (this.$router.currentRoute.path !== '/login') {
+        this.$router.push('/login')
+      }
     })
 
     this.$ws.socket.on('service:event:dlake:notifications:add',
