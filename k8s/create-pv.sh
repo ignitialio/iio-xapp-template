@@ -1,3 +1,3 @@
 #!/bin/sh
 
-kubectl apply -f pv/
+kubectl apply -f k8s/pv/

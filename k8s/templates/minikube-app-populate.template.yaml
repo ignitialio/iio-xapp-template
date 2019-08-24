@@ -9,7 +9,7 @@ spec:
         - name: iioat-populate
           image: ignitial/iioat:APP_VERSION
           command: ["npm"]
-          args: ["run", "config:populate:atlas"]
+          args: ["run", "prod:config:populate"]
           imagePullPolicy: Never
           env:
             - name: POPULATE_ALL

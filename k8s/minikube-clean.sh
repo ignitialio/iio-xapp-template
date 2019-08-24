@@ -1,8 +1,8 @@
 #!/bin/sh
 
-./clean-app.sh
-./clean-redis.sh
-./clean-traefik.sh
+./k8s/clean-app.sh
+./k8s/clean-redis.sh
+./k8s/clean-traefik.sh
 
 kubectl delete secret iiosecrets
 kubectl delete secret regcred

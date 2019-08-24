@@ -58,19 +58,13 @@ complete with your own features.
 You can implement any feature through IIOS services that allow you to inject new
 UI components.
 
-## install dependencies
+## Use in development
+
+### Install dependencies
 
 ```bash
 npm i
 ```
-
-## build data lake docker image for data access
-
-```bash
-npm run docker:build
-```
-
-## Use in development
 
 ### Populate database for development
 
@@ -79,7 +73,7 @@ order to run web app. Then, you need to populate database before starting your
 app:
 
 ```bash
-npm run config:populate:mongo
+npm run dev:config:populate
 ```
 
 Here we use mongodb as primary database (user info is a MongoDB collection), then
@@ -94,48 +88,55 @@ concerned:
 export MONGODB_DBNAME=ignitialio
 ```
 
-## use bash file create by the previous step to start application server
+RBAC information is populated as well in Redis. Then, we need to define IIOS
+namespace in order to let script know which one to use in Redis database:
 
+```bash
+export IIOS_NAMESPACE=ignitialio
+```
+
+### Run for development
+
+
+#### Start app and associated services
 
 ```bash
 npm run dev:start
 ```
 
-## stop and clean up
+#### Stop and clean up
 
 ```bash
 npm run dev:stop
 ```
 
-## start with minikube
+### Run with minikube
 
-First, you need to create app and dlake images and publish them to your current private
-docker registry (default: registry.ignitial.io, but this is not available for public
-usage, so create/define your own)
+> __Note__
+>  
+> You need minikube installed and configured.
+
+First, you need to create app and dlake images and publish them to minikube docker
+environment:
 
 ```bash
-npm run publish:dlake:docker && npm run publish:docker
+npm run docker:publish:minikube
 ```
 
 > __Note__
 >   
-> dlake image uses _registry.ignitial.io/ignitial/dlake_ base image. You need as
-> well to create your own base image (see _dlake_ repository) if you do not have
-> access to _registry.ignitial.io_.
-
-Once done, you can start your clustered app (start minikube first, if not already
-  done):
+> This uses _ignitial/dlake_ and _ignitial/auth_ images published on Docker Hub.
 
 ```bash
-minikube start
-
-cd k8s
-./minikube_cluster.sh
+npm run minikube:start
 ```
 
-## clean up
+#### Clean up
 
 ```bash
-cd k8s
-./minikube_clean.sh
+npm run minikube:stop
 ```
+
+> __Note__
+>   
+> This will not stop minikube cluster.

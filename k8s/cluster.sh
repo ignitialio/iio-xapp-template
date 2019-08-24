@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 # Sets app version
 # ------------------------------------------------------------------------------
-APP_VERSION=$(cat ../package.json \
+APP_VERSION=$(cat ./package.json \
   | grep version \
   | head -1 \
   | awk -F: '{ print $2 }' \
@@ -11,12 +11,12 @@ APP_VERSION=$(cat ../package.json \
   | tr -d '[[:space:]]')
 
 echo "get app version..."
-cat templates/app-deploy.template.yaml | sed "s/APP_VERSION/$APP_VERSION/g" > app/app-deploy.yaml
+cat k8s/templates/app-deploy.template.yaml | sed "s/APP_VERSION/$APP_VERSION/g"| sed "s/DLAKE_VERSION/$DLAKE_VERSION/g" | sed "s/AUTH_VERSION/$AUTH_VERSION/g" > k8s/app/app-deploy.yaml
 
 # ------------------------------------------------------------------------------
 # Env variables for local run
 # ------------------------------------------------------------------------------
-. ./set_k8s_env.sh
+. ./k8s/set_k8s_env.sh
 
 # ------------------------------------------------------------------------------
 # Labels (optional)
@@ -48,12 +48,12 @@ kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} create -f $IIO_K8S_SECRETS_PATH
 # ------------------------------------------------------------------------------
 # Traefik
 # ------------------------------------------------------------------------------
-kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} create -f traefik/
+kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} create -f k8s/traefik/
 
 # ------------------------------------------------------------------------------
 # Redis
 # ------------------------------------------------------------------------------
-kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} apply -f redis/
+kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} apply -f k8s/redis/
 
 # ------------------------------------------------------------------------------
 # IIO app
@@ -62,4 +62,4 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 echo "${YELLOW}waiting for containers creation...${NC}"
 sleep 20
-kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} apply -f app/app-deploy.yaml
+kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} apply -f k8s/app/app-deploy.yaml

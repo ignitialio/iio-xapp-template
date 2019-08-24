@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ./set_k8s_env.sh
+. ./k8s/set_k8s_env.sh
 
 # Create a namespace to run cert-manager in
 kubectl --kubeconfig ${IIO_K8S_KUBECONFIG_PATH} create namespace cert-manager

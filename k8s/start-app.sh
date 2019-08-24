@@ -1,3 +1,3 @@
 #!/bin/sh
 
-kubectl apply -f app/minikube-app-deploy.yaml
+kubectl apply -f k8s/app/minikube-app-deploy.yaml

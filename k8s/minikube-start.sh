@@ -1,10 +1,24 @@
 #!/bin/sh
 
+RED='\033[0;31m'
+ORANGE='\033[0;33m'
+NC='\033[0m' # No Color
+
+MINIKUBE_STATUS=$(minikube status | grep Running)
+echo "MINIKUBE_STATUS=<$MINIKUBE_STATUS>"
+
+if [ -z "$MINIKUBE_STATUS" ]
+then
+  minikube start
+else
+  echo "${ORANGE}minikube started${NC}"
+fi
+
 # make a copy of /etc/hosts
 sudo cp /etc/hosts /etc/hosts.beforekube
 
 # sets app versions
-export APP_VERSION=$(cat ../package.json \
+export APP_VERSION=$(cat ./package.json \
   | grep version \
   | head -1 \
   | awk -F: '{ print $2 }' \
@@ -14,12 +28,12 @@ export APP_VERSION=$(cat ../package.json \
 export AUTH_VERSION=1.0.2
 export DLAKE_VERSION=3.0.3
 
-echo "get app version..."
-cat templates/minikube-app-deploy.template.yaml | sed "s/APP_VERSION/$APP_VERSION/g" | sed "s/DLAKE_VERSION/$DLAKE_VERSION/g" | sed "s/AUTH_VERSION/$AUTH_VERSION/g" > app/minikube-app-deploy.yaml
+echo "set app version (APP_VERSION=${APP_VERSION})..."
+cat k8s/templates/minikube-app-deploy.template.yaml | sed "s/APP_VERSION/$APP_VERSION/g" | sed "s/DLAKE_VERSION/$DLAKE_VERSION/g" | sed "s/AUTH_VERSION/$AUTH_VERSION/g" > k8s/app/minikube-app-deploy.yaml
 
-# minikube start
+# cluster start
 
-. ./set_k8s_env.sh
+. ./k8s/set_k8s_env.sh
 
 # docker registry
 kubectl create secret generic regcred \
@@ -27,20 +41,20 @@ kubectl create secret generic regcred \
     --type=kubernetes.io/dockerconfigjson
 
 # create K8S secrets from credential file
-./secrets.sh
+./k8s/secrets.sh
 
 # start traefik
-./start-traefik.sh
+./k8s/start-traefik.sh
 
 # start Redis
-./start-redis.sh
+./k8s/start-redis.sh
 
 # wait for redis
 echo "wait for redis ready..."
 sleep 5
 
 # start app
-./start-app.sh
+./k8s/start-app.sh
 
 # declare local domain/host for traefik routing
 # WARNGING: DON'T FORGET TO CLEAN UP

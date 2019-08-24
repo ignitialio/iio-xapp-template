@@ -18,7 +18,7 @@ spec:
       containers:
       - name: iioat-app
         image: registry.ignitial.io/ignitial/iioat:5.0.0
-        imagePullPolicy: Never
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -97,7 +97,7 @@ spec:
       containers:
       - name: dlake
         image: ignitial/dlake:3.0.3
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 20194
             name: dt-service
@@ -160,7 +160,7 @@ spec:
       containers:
       - name: auth
         image: ignitial/auth:1.0.2
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 20295
         env:
