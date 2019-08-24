@@ -27,7 +27,7 @@ metadata:
     ingress.kubernetes.io/ssl-temporary-redirect: "false"
 spec:
   rules:
-  - host: dev.qoonstro.com
+  - host: dev.qoonst.ro
     http:
       paths:
       - path: /

@@ -32,5 +32,5 @@ spec:
     - http01:
         ingress: traefik-web-ui
       domains:
-      - qoonstro.com
-      - dev.qoonstro.com
+      - qoonst.ro
+      - dev.qoonst.ro

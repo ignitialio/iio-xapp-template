@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: iioat-app
-        image: registry.ignitial.io/ignitial/iioat:APP_VERSION
+        image: ignitial/iioat:APP_VERSION
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
