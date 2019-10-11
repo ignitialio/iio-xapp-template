@@ -26,7 +26,7 @@ export IIOS_APP_VERSION=$(cat ./package.json \
   | tr -d '[[:space:]]')
 
 export IIOS_AUTH_VERSION=1.0.2
-export IIOS_DLAKE_VERSION=3.0.3
+export IIOS_DLAKE_VERSION=3.0.4
 
 echo "set app version (IIOS_APP_VERSION=${IIOS_APP_VERSION})..."
 cat k8s/templates/minikube-app-deploy.template.yaml | sed "s/IIOS_APP_VERSION/$IIOS_APP_VERSION/g" | sed "s/IIOS_DLAKE_VERSION/$IIOS_DLAKE_VERSION/g" | sed "s/IIOS_AUTH_VERSION/$IIOS_AUTH_VERSION/g" > k8s/app/minikube-app-deploy.yaml
